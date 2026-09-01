@@ -27,7 +27,7 @@ export default function Navbar() {
       className={`sticky top-0 z-50 w-full transition-all duration-500 ${
         scrolled
           ? "bg-white/95 shadow-[0_4px_30px_-10px_rgba(11,36,82,0.25)] backdrop-blur-md"
-          : "bg-transparent"
+          : "bg-white"
       }`}
     >
       <div className="container-page flex h-20 items-center justify-between">
@@ -54,7 +54,7 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 className={`relative text-sm font-semibold uppercase tracking-widest transition-colors ${
-                  scrolled ? "text-navy-800" : "text-white"
+                  scrolled ? "text-navy-800" : "text-navy-800"
                 } ${active ? "opacity-100" : "opacity-80 hover:opacity-100"}`}
               >
                 {link.label}
@@ -86,17 +86,17 @@ export default function Navbar() {
         >
           <span
             className={`block h-0.5 w-6 rounded transition-all duration-300 ${
-              scrolled || open ? "bg-navy" : "bg-white"
+              "bg-navy"
             } ${open ? "translate-y-2 rotate-45" : ""}`}
           />
           <span
             className={`block h-0.5 w-6 rounded transition-all duration-300 ${
-              scrolled || open ? "bg-navy" : "bg-white"
+              "bg-navy"
             } ${open ? "opacity-0" : ""}`}
           />
           <span
             className={`block h-0.5 w-6 rounded transition-all duration-300 ${
-              scrolled || open ? "bg-navy" : "bg-white"
+              "bg-navy"
             } ${open ? "-translate-y-2 -rotate-45" : ""}`}
           />
         </button>
