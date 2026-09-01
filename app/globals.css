@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-display: "Playfair Display", ui-serif, Georgia, serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --color-navy: #0b2452;
+  --color-green: #0f7a3c;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: #12161c;
+  background: #fbf9f4;
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: #0f7a3c;
+  color: #ffffff;
+}
+
+/* Thin premium scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #f6f2e7;
+}
+::-webkit-scrollbar-thumb {
+  background: #0b2452;
+  border-radius: 999px;
+  border: 2px solid #f6f2e7;
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-8xl px-6 sm:px-8 lg:px-12;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs sm:text-sm font-semibold uppercase tracking-[0.25em] text-green-600;
+  }
+
+  .heading-xl {
+    @apply font-display text-4xl sm:text-5xl lg:text-6xl leading-[1.05] tracking-tight text-navy-900;
+  }
+
+  .heading-lg {
+    @apply font-display text-3xl sm:text-4xl leading-[1.1] tracking-tight text-navy-900;
+  }
+
+  .heading-md {
+    @apply font-display text-2xl sm:text-3xl leading-tight tracking-tight text-navy-900;
+  }
+
+  .body-lg {
+    @apply text-base sm:text-lg leading-relaxed text-navy-700/90;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-green px-7 py-3.5 text-sm font-semibold uppercase tracking-wider text-white shadow-card transition-all duration-300 hover:bg-green-700 hover:shadow-premium active:scale-[0.98];
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/40 bg-white/5 px-7 py-3.5 text-sm font-semibold uppercase tracking-wider text-white backdrop-blur-sm transition-all duration-300 hover:bg-white hover:text-navy active:scale-[0.98];
+  }
+
+  .btn-dark {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-navy px-7 py-3.5 text-sm font-semibold uppercase tracking-wider text-white shadow-card transition-all duration-300 hover:bg-navy-700 hover:shadow-premium active:scale-[0.98];
+  }
+
+  .chip {
+    @apply inline-flex items-center rounded-full border border-navy-200 bg-white px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-navy-600;
+  }
+
+  .card-premium {
+    @apply rounded-2xl border border-navy-100/70 bg-white shadow-card transition-all duration-500 hover:-translate-y-1 hover:shadow-premium;
+  }
+
+  .divider-gold {
+    @apply h-[3px] w-16 rounded-full bg-gradient-to-r from-green-500 to-navy-500;
+  }
+
+  .reveal {
+    opacity: 0;
+    animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+}
