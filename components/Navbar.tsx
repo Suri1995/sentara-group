@@ -23,22 +23,17 @@ export default function Navbar() {
   }, [pathname]);
 
   return (
-    <header
-      className={`sticky top-0 z-50 w-full transition-all duration-500 ${
-        scrolled
-          ? "bg-white/95 shadow-[0_4px_30px_-10px_rgba(11,36,82,0.25)] backdrop-blur-md"
-          : "bg-white"
-      }`}
-    >
-      <div className="container-page flex h-20 items-center justify-between">
+    <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-5">
+      <div className={`mx-auto max-w-7xl rounded-full border px-4 transition-all duration-500 sm:px-6 ${scrolled || open ? "border-navy-100 bg-white/95 shadow-[0_20px_60px_-25px_rgba(11,36,82,0.45)] backdrop-blur-xl" : "border-white/15 bg-navy-950/55 backdrop-blur-md"}`}>
+      <div className="flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center gap-3">
-          <div className="relative h-10 w-40 sm:h-11 sm:w-48">
+          <div className="relative h-9 w-36 sm:h-10 sm:w-44">
             <Image
               src="/images/brand/sentara-logo.png"
               alt={brand.name}
               fill
               priority
-              className="object-contain object-left"
+              className={`object-contain object-left ${scrolled || open ? "" : "brightness-0 invert"}`}
             />
           </div>
         </Link>
@@ -54,7 +49,7 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 className={`relative text-sm font-semibold uppercase tracking-widest transition-colors ${
-                  scrolled ? "text-navy-800" : "text-navy-800"
+                  scrolled || open ? "text-navy-800" : "text-white"
                 } ${active ? "opacity-100" : "opacity-80 hover:opacity-100"}`}
               >
                 {link.label}
@@ -101,11 +96,12 @@ export default function Navbar() {
           />
         </button>
       </div>
+      </div>
 
       <div
-        className={`overflow-hidden bg-white shadow-xl transition-all duration-500 lg:hidden ${
-          open ? "max-h-96" : "max-h-0"
-        }`}
+        className={`mx-auto max-w-7xl overflow-hidden rounded-b-[2rem] bg-white shadow-xl transition-all duration-500 lg:hidden ${
+          open ? "max-h-96 border-x border-b border-navy-100" : "max-h-0"
+        }}`}
       >
         <nav className="container-page flex flex-col gap-1 py-4">
           {navLinks.map((link) => (

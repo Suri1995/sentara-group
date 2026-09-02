@@ -22,7 +22,7 @@ export default function HomePage() {
             <h1 className="mt-6 font-display text-5xl leading-[0.98] tracking-tight sm:text-6xl lg:text-8xl">Building Hyderabad&apos;s skyline with integrity, precision &amp; vision.</h1>
             <p className="mt-7 max-w-lg text-base leading-7 text-white/70 sm:text-lg">A professionally managed group delivering premium residential, healthcare and hospitality developments across Hyderabad&apos;s high-growth corridors.</p>
             <div className="mt-9 flex flex-wrap gap-3"><Link href="/projects" className="btn-primary">Explore our work →</Link><Link href="/contact" className="btn-outline">Start a conversation</Link></div>
-            <div className="mt-14 flex items-center gap-3 text-xs uppercase tracking-[0.22em] text-white/45">Hyderabad · Telangana · India</div>
+            <div className="mt-14 flex flex-wrap items-center gap-5 text-xs uppercase tracking-[0.22em] text-white/45"><span>Hyderabad · Telangana · India</span><a href="#portfolio" className="group flex items-center gap-3 text-white/60 transition hover:text-white"><span className="h-8 w-px bg-green" /><span>Scroll to discover</span><span className="transition-transform group-hover:translate-y-1">↓</span></a></div>
           </Reveal>
           <Reveal delay={150} className="relative lg:-mr-24">
             <div className="absolute -left-4 -top-4 z-10 rounded-full border border-white/20 bg-navy/70 px-4 py-2 text-[10px] uppercase tracking-[0.24em] text-green-200 backdrop-blur">25+ years of leadership</div>
