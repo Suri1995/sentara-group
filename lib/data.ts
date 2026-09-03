@@ -104,9 +104,9 @@ export const projects: ProjectSummary[] = [
       "A premium 5-storied deluxe residential apartment complex offering open, natural ventilation on three sides, adjacent to a 56-acre Police Commissionerate site and 230-acre urban forest.",
     image: "/images/landspace/landspace-elite-building.jpg",
     stats: [
-      { value: "600", label: "Sq. Yards Plot" },
-      { value: "1,535", label: "Sq. Ft. — 3 BHK" },
-      { value: "S+5", label: "Stilt + 5 Floors" },
+      { value: "600", label: "Sq.Yds Plot" },
+      { value: "1,535", label: "Sq.Ft Flats" },
+      { value: "S+5", label: "Floors" },
     ],
   },
   {
@@ -119,7 +119,7 @@ export const projects: ProjectSummary[] = [
       "A 30-bed multi-speciality healthcare facility built to deliver comprehensive, community-focused clinical care — extending the Group's quality commitment into essential public healthcare.",
     image: "/images/arunjyothi/arunjyothi-hospital.jpg",
     stats: [
-      { value: "400", label: "Sq. Yards Plot" },
+      { value: "400", label: "Sq. Yds Plot" },
       { value: "30", label: "Bed Facility" },
     ],
   },
