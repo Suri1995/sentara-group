@@ -30,7 +30,7 @@ export default function Navbar() {
           : "bg-white"
       }`}
     >
-      <div className="container-page flex h-20 items-center justify-between">
+      <div className="container-page flex h-[4.5rem] items-center justify-between lg:h-20">
         <Link href="/" className="flex items-center gap-3">
           <div className="relative h-10 w-40 sm:h-11 sm:w-48">
             <Image
@@ -53,7 +53,7 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`relative text-sm font-semibold uppercase tracking-widest transition-colors ${
+                className={`relative rounded-full px-3 py-2 text-[11px] font-bold uppercase tracking-[0.18em] transition-all hover:bg-sand-100 ${
                   scrolled ? "text-navy-800" : "text-navy-800"
                 } ${active ? "opacity-100" : "opacity-80 hover:opacity-100"}`}
               >
@@ -69,7 +69,7 @@ export default function Navbar() {
         <div className="hidden lg:block">
           <Link
             href="/contact"
-            className={`rounded-full px-6 py-2.5 text-sm font-semibold uppercase tracking-wider transition-all duration-300 ${
+            className={`rounded-full px-6 py-3 text-[11px] font-bold uppercase tracking-[0.18em] shadow-soft transition-all duration-300 ${
               scrolled
                 ? "bg-navy text-white hover:bg-navy-700"
                 : "bg-white text-navy hover:bg-green hover:text-white"

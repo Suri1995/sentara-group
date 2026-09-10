@@ -24,7 +24,7 @@ export default function Footer() {
 
         <div>
           <h4 className="mb-5 font-display text-lg text-white">Explore</h4>
-          <ul className="space-y-3 text-sm text-white/60">
+          <ul className="flex flex-col gap-3 text-sm text-white/60">
             {navLinks.map((l) => (
               <li key={l.href}>
                 <Link href={l.href} className="transition-colors hover:text-green-400">
@@ -37,7 +37,7 @@ export default function Footer() {
 
         <div>
           <h4 className="mb-5 font-display text-lg text-white">Projects</h4>
-          <ul className="space-y-3 text-sm text-white/60">
+          <ul className="flex flex-col gap-3 text-sm text-white/60">
             {projects.map((p) => (
               <li key={p.slug}>
                 <Link
@@ -53,7 +53,7 @@ export default function Footer() {
 
         <div>
           <h4 className="mb-5 font-display text-lg text-white">Get in Touch</h4>
-          <ul className="space-y-3 text-sm text-white/60">
+          <ul className="flex flex-col gap-3 text-sm text-white/60">
             <li>{brand.addressHQ}</li>
             <li>
               <a href={`tel:${brand.phoneRaw}`} className="transition-colors hover:text-green-400">

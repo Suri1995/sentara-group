@@ -50,8 +50,8 @@ const config: Config = {
       },
 
       fontFamily: {
-        display: ["var(--font-display)", "serif"],
-        sans: ["var(--font-sans)", "sans-serif"],
+        display: ["var(--font-jakarta)", "sans-serif"],
+        sans: ["var(--font-jakarta)", "sans-serif"],
       },
 
       maxWidth: {
