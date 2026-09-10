@@ -12,7 +12,7 @@ export default function ProjectCard({ project }: { project: ProjectSummary }) {
   return (
     <Link
       href={`/projects/${project.slug}`}
-      className="card-premium group flex flex-col overflow-hidden"
+      className="card-premium group flex flex-col overflow-hidden rounded-[1.5rem]"
     >
       <div className="relative aspect-[4/3] overflow-hidden">
         <Image
@@ -30,7 +30,7 @@ export default function ProjectCard({ project }: { project: ProjectSummary }) {
           {project.statusLabel}
         </span>
       </div>
-      <div className="flex flex-1 flex-col p-6">
+      <div className="flex flex-1 flex-col p-6 sm:p-7">
         <p className="text-xs font-semibold uppercase tracking-widest text-green-600">
           {project.location}
         </p>
