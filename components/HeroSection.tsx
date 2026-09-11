@@ -26,8 +26,6 @@ const heroSlides = [
   },
 ]
 
-// Choreography, borrowed from the hero-10 pattern: a soft blur+rise stagger
-// for text, and a slightly slower settle for the visual side.
 const container: Variants = {
   hidden: {},
   visible: {
@@ -45,24 +43,21 @@ const item: Variants = {
   },
 }
 
-const badge: Variants = {
-  hidden: { opacity: 0, y: -8, scale: 0.94 },
+const bgReveal: Variants = {
+  hidden: { opacity: 0, scale: 1.08 },
   visible: {
     opacity: 1,
-    y: 0,
     scale: 1,
-    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.5 },
+    transition: { duration: 1.4, ease: [0.22, 1, 0.36, 1] },
   },
 }
 
-const media: Variants = {
-  hidden: { opacity: 0, y: 24, scale: 0.97, filter: 'blur(8px)' },
+const strip: Variants = {
+  hidden: { opacity: 0, y: 12 },
   visible: {
     opacity: 1,
     y: 0,
-    scale: 1,
-    filter: 'blur(0px)',
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.15 },
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.5 },
   },
 }
 
@@ -71,30 +66,66 @@ export default function HeroSection({ tagline }: { tagline: string }) {
   const animate = !reduce
 
   return (
-    <section className="bg-navy relative min-h-[min(820px,100vh)] pt-20 text-white">
-      {/* Layered premium backdrop: grid texture + soft radial glow */}
-      <div className="editorial-grid absolute inset-0 opacity-20" />
+    <section className="bg-navy-900 relative min-h-[100svh] overflow-hidden text-white lg:min-h-screen">
+      {/* Full-bleed image background */}
+      <motion.div
+        className="absolute inset-0 z-0"
+        variants={animate ? bgReveal : undefined}
+        initial={animate ? 'hidden' : false}
+        animate="visible"
+      >
+        <Carousel slides={heroSlides} aspect="h-full w-full" rounded="rounded-none" />
+      </motion.div>
+
+      {/* Legibility scrims — diagonal on desktop, bottom-up on mobile */}
       <div
-        className="pointer-events-none absolute -top-40 right-[-10%] h-[520px] w-[520px] rounded-full opacity-30 blur-[120px]"
-        style={{
-          background:
-            'radial-gradient(circle, rgba(74,222,128,0.35) 0%, rgba(74,222,128,0) 70%)',
-        }}
+        aria-hidden
+        className="absolute inset-0 z-[1] hidden bg-gradient-to-r from-navy-900/95 via-navy-900/60 to-navy-900/15 lg:block"
       />
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/30 to-transparent"
         aria-hidden
+        className="absolute inset-0 z-[1] bg-gradient-to-t from-navy-900/95 via-navy-900/55 to-navy-900/15 lg:hidden"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-x-0 bottom-0 z-[1] h-56 bg-gradient-to-t from-black/50 to-transparent"
       />
 
+      {/* Signature brand glow, blended into the photo rather than floating above it */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-32 right-[-8%] z-[1] h-[480px] w-[480px] rounded-full opacity-40 mix-blend-screen blur-[110px]"
+        style={{
+          background:
+            'radial-gradient(circle, rgba(74,222,128,0.45) 0%, rgba(74,222,128,0) 70%)',
+        }}
+      />
+
+      {/* Editorial inset frame */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-3 z-[2] rounded-[1.75rem] border border-white/10 sm:inset-5"
+      />
+
+      {/*
+        Content is vertically CENTERED, not pinned to the bottom.
+        On short/mobile viewports this still reads top-down naturally;
+        on tall desktop viewports it no longer leaves a dead zone above
+        an oversized headline.
+      */}
       <motion.div
-        className="container-page relative z-10 grid min-h-[min(740px,calc(100vh-80px))] items-center gap-12 py-16 lg:grid-cols-[0.9fr_1.1fr] lg:py-20"
+        className="container-page relative z-10 flex min-h-[100svh] flex-col justify-center gap-10 py-20 lg:min-h-screen lg:gap-12 lg:py-24"
         variants={animate ? container : undefined}
         initial={animate ? 'hidden' : false}
         whileInView={animate ? 'visible' : undefined}
         animate={animate ? undefined : 'visible'}
         viewport={{ once: true, margin: '-80px' }}
       >
-        <div className="relative max-w-xl">
+        {/* Headline + description now stack in a single reading column.
+            The previous 12-col split with items-end left the paragraph
+            stranded beside an oversized headline; a single column with
+            a capped headline size gives a much cleaner scan path. */}
+        <div className="">
           <motion.p
             variants={animate ? item : undefined}
             className="eyebrow !text-green-300"
@@ -104,7 +135,8 @@ export default function HeroSection({ tagline }: { tagline: string }) {
 
           <motion.h1
             variants={animate ? item : undefined}
-            className="mt-6 font-display text-5xl leading-[0.98] tracking-tight text-balance sm:text-6xl lg:text-8xl"
+            className="mt-5 font-display leading-[1.08] tracking-tight text-balance"
+            style={{ fontSize: 'clamp(2.25rem, 1.5rem + 3vw, 4.5rem)' }}
           >
             <Balancer>
               Building Hyderabad&apos;s skyline with integrity, precision
@@ -114,7 +146,7 @@ export default function HeroSection({ tagline }: { tagline: string }) {
 
           <motion.p
             variants={animate ? item : undefined}
-            className="mt-7 max-w-lg text-base leading-7 text-white/70 sm:text-lg"
+            className="mt-6 max-w-3xl text-base leading-7 text-white/75 sm:text-lg"
           >
             <Balancer>
               A professionally managed group delivering premium residential,
@@ -138,37 +170,22 @@ export default function HeroSection({ tagline }: { tagline: string }) {
               Start a conversation
             </Link>
           </motion.div>
-
-          <motion.div
-            variants={animate ? item : undefined}
-            className="mt-14 flex items-center gap-3 text-xs uppercase tracking-[0.22em] text-white/45"
-          >
-            Hyderabad · Telangana · India
-          </motion.div>
         </div>
 
-        <div className="relative lg:-mr-24">
-          <motion.div
-            variants={animate ? badge : undefined}
-            className="border-white/20 bg-navy/70 text-green-200 absolute -top-4 -left-4 z-10 rounded-full border px-4 py-2 text-[10px] uppercase tracking-[0.24em] backdrop-blur"
-          >
-            25+ years of leadership
-          </motion.div>
-
-          <motion.div variants={animate ? media : undefined}>
-            <Carousel
-              slides={heroSlides}
-              aspect="aspect-[4/5] sm:aspect-[16/10]"
-              rounded="rounded-[2rem]"
-            />
-          </motion.div>
-
-          {/* Fine gold-free accent frame for a premium, editorial finish */}
-          <div
-            className="border-white/10 pointer-events-none absolute -inset-3 -z-10 rounded-[2.5rem] border"
-            aria-hidden
-          />
-        </div>
+        {/* Bottom info strip spans the full width — a single quiet
+            credentials bar, kept clearly separated from the CTAs above
+            with its own top border and spacing */}
+        <motion.div
+          variants={animate ? strip : undefined}
+          className="flex flex-col gap-4 border-t border-white/15 pt-6 text-xs uppercase tracking-[0.22em] text-white/60 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
+            <span className="text-white/85">25+ years of leadership</span>
+            <span className="hidden h-3 w-px bg-white/20 sm:block" aria-hidden />
+            <span>Residential · Healthcare · Hospitality</span>
+          </div>
+          <span>Hyderabad · Telangana · India</span>
+        </motion.div>
       </motion.div>
     </section>
   )

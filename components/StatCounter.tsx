@@ -55,9 +55,13 @@ export default function StatCounter({
   }, [value, started]);
 
   return (
-    <div ref={ref} className="text-center sm:text-left">
+    // min-w-0 is the key fix: grid items default to min-width:auto, which
+    // stops a cell from shrinking below its content's intrinsic width. A
+    // wide number like "11,24,000+" was overflowing straight past its
+    // column boundary into the next stat instead of wrapping or shrinking.
+    <div ref={ref} className="min-w-0 text-center sm:text-left">
       <p
-        className={`font-display text-3xl sm:text-4xl lg:text-5xl ${
+        className={`break-words font-display text-2xl leading-tight [font-variant-numeric:tabular-nums] sm:text-3xl lg:text-4xl xl:text-5xl ${
           dark ? "text-white" : "text-navy-900"
         }`}
       >

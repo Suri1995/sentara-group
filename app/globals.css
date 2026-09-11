@@ -27,6 +27,15 @@
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 5rem;
+    /* Without an explicit background here, browsers can fall back to
+       their own dark-mode default for any pixel outside what body
+       explicitly paints (e.g. during rubber-band/overscroll) — that's
+       the thin dark frame around the page. */
+    background: var(--color-sand);
+    /* Tells the browser this page is light-themed, so it stops
+       substituting dark-mode defaults (backgrounds, form controls,
+       scrollbars) anywhere we haven't styled explicitly. */
+    color-scheme: light;
   }
 
   body {
