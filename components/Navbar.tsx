@@ -37,7 +37,7 @@ export default function Navbar() {
           gives the pill a visible edge instead of bleeding into the
           background behind it. */}
       <div
-        className={`container-page relative flex h-[4.5rem] items-center justify-between rounded-full bg-white/65 px-5 ring-1 ring-navy-800/[0.06] backdrop-blur-xl transition-all duration-500 sm:px-6 lg:h-[5.25rem] lg:px-8 ${
+        className={`container-page relative flex h-[4.5rem] items-center justify-between rounded-full bg-white/85 px-5 ring-1 ring-navy-800/[0.06] backdrop-blur-xl transition-all duration-500 sm:px-6 lg:h-[5.25rem] lg:px-8 ${
           scrolled
             ? "shadow-[0_24px_48px_-20px_rgba(11,36,82,0.35)]"
             : "shadow-[0_16px_36px_-20px_rgba(11,36,82,0.2)]"
@@ -68,7 +68,7 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 aria-current={active ? "page" : undefined}
-                className={`border-b-2 pb-1 text-[13px] font-semibold tracking-wide transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500/50 focus-visible:ring-offset-2 ${
+                className={`border-b-2 pb-1 text-[15px] font-semibold tracking-wide transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500/50 focus-visible:ring-offset-2 ${
                   active
                     ? "border-green-500 text-navy"
                     : "border-transparent text-navy-800/65 hover:border-navy-800/20 hover:text-navy"

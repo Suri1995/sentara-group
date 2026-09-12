@@ -59,17 +59,17 @@ export default function StatCounter({
     // stops a cell from shrinking below its content's intrinsic width. A
     // wide number like "11,24,000+" was overflowing straight past its
     // column boundary into the next stat instead of wrapping or shrinking.
-    <div ref={ref} className="min-w-0 text-center sm:text-left">
+    <div ref={ref} className="min-w-0 text-center">
       <p
-        className={`break-words font-display text-2xl leading-tight [font-variant-numeric:tabular-nums] sm:text-3xl lg:text-4xl xl:text-5xl ${
-          dark ? "text-white" : "text-navy-900"
+        className={`break-words font-display text-2xl leading-tight [font-variant-numeric:tabular-nums] sm:text-2xl lg:text-3xl xl:text-4xl font-bold ${
+          dark ? "text-white" : "text-navy"
         }`}
       >
         {display}
       </p>
       <p
-        className={`mt-2 text-xs font-semibold uppercase tracking-widest sm:text-sm ${
-          dark ? "text-white/60" : "text-navy-500"
+        className={`mt-2 text-[10px] font-semibold uppercase tracking-widest sm:text-[12px] ${
+          dark ? "text-white/60" : "text-green"
         }`}
       >
         {label}

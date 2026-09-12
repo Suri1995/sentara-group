@@ -123,8 +123,7 @@
   .eyebrow {
     @apply inline-flex items-center gap-2
       text-xs font-semibold uppercase
-      tracking-[0.25em] text-green-600
-      sm:text-sm;
+      tracking-[0.25em] text-green-600;
   }
 
   .heading-xl {
