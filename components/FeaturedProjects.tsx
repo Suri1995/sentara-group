@@ -10,7 +10,7 @@ export default function FeaturedProjects({
   return (
     <section
       aria-labelledby="featured-projects-heading"
-      className="bg-green-100 py-8 sm:py-20"
+      className="bg-sage-100 py-20 sm:py-28"
     >
       <div className="container-page">
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
@@ -19,7 +19,7 @@ export default function FeaturedProjects({
 
             <h2
               id="featured-projects-heading"
-              className="heading-xl mt-4 max-w-2xl"
+              className="heading-xl display-editorial mt-5 max-w-3xl"
             >
               Projects that define our legacy.
             </h2>

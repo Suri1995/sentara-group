@@ -135,12 +135,12 @@ export default function HeroSection({ tagline }: { tagline: string }) {
 
           <motion.h1
             variants={animate ? item : undefined}
-            className="mt-5 font-display leading-[1.08] tracking-tight text-balance"
-            style={{ fontSize: 'clamp(2.25rem, 1.5rem + 3vw, 4.5rem)' }}
+            className="heading-display mt-6 max-w-5xl text-balance"
           >
             <Balancer>
-              Building Hyderabad&apos;s skyline with integrity, precision
-              &amp; vision.
+              Building Hyderabad&apos;s skyline
+              <br />
+              with integrity, precision &amp; vision.
             </Balancer>
           </motion.h1>
 

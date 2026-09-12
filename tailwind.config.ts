@@ -46,6 +46,13 @@ const config: Config = {
           300: "#e2d6b5",
         },
 
+        sage: {
+          50: "#f4f8f3",
+          100: "#dfe9df",
+          200: "#c8dbc9",
+          300: "#a9c5ad",
+        },
+
         ink: "#12161c",
       },
 

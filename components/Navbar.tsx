@@ -30,14 +30,14 @@ export default function Navbar() {
   }, [open]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 w-full px-3 pt-1 sm:px-4 sm:pt-2">
+    <header className="fixed inset-x-0 top-0 z-50 w-full px-4 pt-4 sm:px-6 sm:pt-6">
       {/* Floating rounded pill bar. bg-white/65 alone just renders as a
           flat, undefined white smear against the page — backdrop-blur
           is what actually makes it read as glass, and a hairline ring
           gives the pill a visible edge instead of bleeding into the
           background behind it. */}
       <div
-        className={`container-page relative flex h-[4.5rem] items-center justify-between rounded-full bg-white/85 px-5 ring-1 ring-navy-800/[0.06] backdrop-blur-xl transition-all duration-500 sm:px-6 lg:h-[5.25rem] lg:px-8 ${
+        className={`container-page relative flex h-[4.5rem] items-center justify-between rounded-full bg-sand-50/90 px-5 ring-1 ring-navy-800/[0.08] backdrop-blur-xl transition-all duration-500 sm:px-6 lg:h-[5rem] lg:px-8 ${
           scrolled
             ? "shadow-[0_24px_48px_-20px_rgba(11,36,82,0.35)]"
             : "shadow-[0_16px_36px_-20px_rgba(11,36,82,0.2)]"

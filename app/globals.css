@@ -17,6 +17,9 @@
   --color-ink: #12161c;
 
   --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+  --color-moss: #315f45;
+  --color-forest: #173b2a;
+  --color-sage: #dfe9df;
 }
 
 /* =========================================================
@@ -122,14 +125,37 @@
 
   .eyebrow {
     @apply inline-flex items-center gap-2
-      text-xs font-semibold uppercase
-      tracking-[0.25em] text-green-600;
+      text-[10px] font-semibold uppercase
+      tracking-[0.32em] text-green-600;
+  }
+
+  .eyebrow::before {
+    content: "";
+    @apply h-px w-8 bg-green-600/70;
+  }
+
+  .section-label {
+    @apply text-[10px] font-semibold uppercase tracking-[0.38em] text-green-700;
+  }
+
+  .display-editorial {
+    @apply font-display font-medium uppercase tracking-[0.16em];
+  }
+
+  .image-frame {
+    @apply relative overflow-hidden rounded-[1.5rem] bg-navy-900;
   }
 
   .heading-xl {
     @apply font-display text-4xl font-medium
       leading-[1.04] tracking-tight text-navy-900
       sm:text-5xl lg:text-6xl xl:text-7xl;
+  }
+
+  .heading-display {
+    font-size: clamp(2.6rem, 7vw, 7rem);
+    line-height: 0.98;
+    letter-spacing: -0.055em;
   }
 
   .heading-lg {
