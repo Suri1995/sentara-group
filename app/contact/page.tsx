@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Image from "next/image";
+import { ArrowUpRight } from "lucide-react";
 import SectionHeading from "@/components/SectionHeading";
 import Reveal from "@/components/Reveal";
 import ContactForm from "@/components/ContactForm";
@@ -35,56 +37,109 @@ const infoCards = [
 export default function ContactPage() {
   return (
     <>
-      <section className="bg-navy-gradient py-24 pt-40 text-center text-white sm:py-28">
-        <div className="container-page">
-          <p className="eyebrow !text-green-300 mb-3">Get in Touch</p>
-          <h1 className="heading-xl text-white">We&rsquo;d Love to Hear From You</h1>
-          <p className="mx-auto mt-5 max-w-xl text-white/70">
-            Whether you&rsquo;re exploring a villa at Anvita Parkside, a home
-            at Landspace Elite, or an investment opportunity in our future
-            ventures — our team is here to help.
-          </p>
+      {/* ---------------- Hero ---------------- */}
+      <section className="relative overflow-hidden bg-navy-gradient py-24 pt-40 text-center text-white sm:py-28">
+        {/* Ambient grid + dual glow — already defined in globals.css but
+            unused elsewhere; reusing them here instead of hand-rolling a
+            one-off gradient keeps this page on the same visual language
+            as the rest of the site with zero new CSS. */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 editorial-grid" />
+        <div aria-hidden className="pointer-events-none absolute inset-0 luxury-gradient" />
+
+        <div className="container-page relative">
+          <Reveal>
+            <div className="flex items-center justify-center gap-3">
+              <span className="h-px w-8 bg-green-300/60 sm:w-10" aria-hidden />
+              <p className="eyebrow !text-green-300">Get in Touch</p>
+              <span className="h-px w-8 bg-green-300/60 sm:w-10" aria-hidden />
+            </div>
+            <h1 className="heading-xl mt-4 text-white">
+              We&rsquo;d Love to Hear From You
+            </h1>
+            <p className="mx-auto mt-5 max-w-xl text-white/70">
+              Whether you&rsquo;re exploring a villa at Anvita Parkside, a home
+              at Landspace Elite, or an investment opportunity in our future
+              ventures — our team is here to help.
+            </p>
+          </Reveal>
         </div>
       </section>
 
-      <section className="py-20 sm:py-28">
-        <div className="container-page grid grid-cols-1 gap-14 lg:grid-cols-3">
-          <div className="space-y-6 lg:col-span-1">
-            {infoCards.map((c) => (
-              <Reveal key={c.label} className="card-premium flex items-start gap-4 p-6">
-                <span className="flex h-12 w-12 flex-none items-center justify-center rounded-xl bg-green-50 text-green-600">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                    {c.icon}
-                  </svg>
-                </span>
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-widest text-navy-500">
-                    {c.label}
-                  </p>
-                  {"href" in c && c.href ? (
-                    <a href={c.href} className="mt-1 block text-navy-900 hover:text-green-600">
-                      {c.value}
-                    </a>
-                  ) : (
-                    <p className="mt-1 text-navy-900">{c.value}</p>
-                  )}
+      {/* ---------------- Info + Form ---------------- */}
+      <section className="relative overflow-hidden py-20 sm:py-28">
+        {/* Faint textured backdrop, same restrained language as other
+            light sections across the site */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, rgba(11,36,82,0.7) 1px, transparent 1px), linear-gradient(to bottom, rgba(11,36,82,0.7) 1px, transparent 1px)",
+            backgroundSize: "48px 48px",
+          }}
+        />
+
+        <div className="container-page relative grid grid-cols-1 gap-10 lg:grid-cols-3 lg:gap-14">
+          <div className="space-y-5 lg:col-span-1">
+            {infoCards.map((c, i) => (
+              <Reveal
+                key={c.label}
+                delay={i * 100}
+                className="group relative overflow-hidden card-premium p-6"
+              >
+                <span
+                  aria-hidden
+                  className="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 bg-gradient-to-r from-green-500 to-navy-500 transition-transform duration-500 ease-out group-hover:scale-x-100"
+                />
+                <div className="flex items-start gap-4">
+                  <span className="flex h-12 w-12 flex-none items-center justify-center rounded-xl bg-green-50 text-green-600 transition-colors duration-300 group-hover:bg-navy-900 group-hover:text-white">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                      {c.icon}
+                    </svg>
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-semibold uppercase tracking-widest text-navy-500">
+                      {c.label}
+                    </p>
+                    {"href" in c && c.href ? (
+                      <a
+                        href={c.href}
+                        className="group/link mt-1 inline-flex items-start gap-1 text-navy-900 transition-colors duration-200 hover:text-green-600"
+                      >
+                        <span className="break-words">{c.value}</span>
+                        <ArrowUpRight
+                          className="mt-0.5 size-3.5 shrink-0 opacity-0 transition-all duration-300 group-hover/link:translate-x-0.5 group-hover/link:opacity-100"
+                          aria-hidden
+                        />
+                      </a>
+                    ) : (
+                      <p className="mt-1 text-navy-900">{c.value}</p>
+                    )}
+                  </div>
                 </div>
               </Reveal>
             ))}
-
-            <Reveal delay={150} className="card-premium p-6">
-              <p className="text-xs font-semibold uppercase tracking-widest text-navy-500">
-                Chairman&rsquo;s Office
-              </p>
-              <p className="mt-1 font-display text-lg text-navy-900">{chairman.name}</p>
-              <p className="text-sm text-navy-600">{chairman.title}</p>
-            </Reveal>
           </div>
 
-          <Reveal delay={100} className="card-premium p-8 lg:col-span-2 sm:p-12">
-            <SectionHeading title="Send Us an Enquiry" description="Fill in your details and our sales team will get back to you within 24 hours." />
-            <div className="mt-10">
-              <ContactForm />
+          <Reveal
+            delay={100}
+            className="relative overflow-hidden card-premium p-8 lg:col-span-2 sm:p-12"
+          >
+            {/* Same dual-glow utility as the hero, heavily dimmed — ties
+                the form panel back to the page's opening visual without
+                competing with the form itself */}
+            <div
+              aria-hidden
+              className="luxury-gradient pointer-events-none absolute inset-0 opacity-40"
+            />
+            <div className="relative">
+              <SectionHeading
+                title="Send Us an Enquiry"
+                description="Fill in your details and our sales team will get back to you within 24 hours."
+              />
+              <div className="mt-10">
+                <ContactForm />
+              </div>
             </div>
           </Reveal>
         </div>

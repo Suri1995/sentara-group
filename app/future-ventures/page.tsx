@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import SectionHeading from "@/components/SectionHeading";
 import Reveal from "@/components/Reveal";
 import { futureVentures } from "@/lib/data";
+import FutureVenturesCarousel from "@/components/FutureVentureCarousel";
 
 export const metadata: Metadata = {
   title: "Future & Proposed Ventures",
@@ -12,8 +14,29 @@ export const metadata: Metadata = {
 
 export default function FutureVenturesPage() {
   return (
-    <section className="py-24 sm:py-32">
-      <div className="container-page">
+    <section className="relative overflow-hidden py-24 sm:py-32">
+      {/* Faint blueprint grid + soft glow — same ambient texture used
+          across the site, so this page opens in the same visual language
+          as the About/Home heroes rather than feeling like a plain list */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.035]"
+        style={{
+          backgroundImage:
+            "linear-gradient(to right, rgba(18,33,58,0.7) 1px, transparent 1px), linear-gradient(to bottom, rgba(18,33,58,0.7) 1px, transparent 1px)",
+          backgroundSize: "44px 44px",
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          backgroundImage:
+            "radial-gradient(ellipse 50% 45% at 90% 0%, rgba(139,107,61,0.07), transparent 60%)",
+        }}
+      />
+
+      <div className="container-page relative">
         <SectionHeading
           eyebrow="What's Next"
           title="Future & Proposed Ventures"
@@ -21,57 +44,26 @@ export default function FutureVenturesPage() {
           align="center"
         />
 
-        <div className="mt-16 space-y-16">
-          {futureVentures.map((v, i) => (
-            <Reveal key={v.title} delay={i * 100}>
-              <div className="card-premium overflow-hidden">
-                <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr]">
-                  <div className="flex flex-col justify-center bg-navy-gradient p-10 text-white sm:p-14">
-                    <span className="chip mb-4 w-fit border-white/30 bg-white/10 text-white">
-                      Proposed · {v.location}
-                    </span>
-                    <h3 className="font-display text-3xl">{v.title}</h3>
-                    <div className="mt-6 grid grid-cols-3 gap-4">
-                      {v.stats.map((s) => (
-                        <div key={s.label}>
-                          <p className="font-display text-xl sm:text-2xl">{s.value}</p>
-                          <p className="mt-1 text-[10px] uppercase tracking-wide text-white/60">
-                            {s.label}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="p-10 sm:p-14">
-                    <p className="body-lg">{v.description}</p>
-                    <ul className="mt-6 space-y-3">
-                      {v.highlights.map((h) => (
-                        <li key={h} className="flex items-start gap-3 text-sm text-navy-700">
-                          <span className="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-green-50 text-green-600">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                              <path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                          </span>
-                          {h}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
+        <Reveal delay={100} className="mt-14 sm:mt-16">
+          <FutureVenturesCarousel ventures={futureVentures} />
+        </Reveal>
 
-        <div className="mt-16 text-center">
-          <p className="body-lg mx-auto max-w-xl">
-            Interested in early access or investment opportunities in these
-            upcoming developments?
-          </p>
-          <Link href="/contact" className="btn-dark mt-6 inline-flex">
-            Register Your Interest
-          </Link>
-        </div>
+        <Reveal delay={futureVentures.length * 60 + 200}>
+          <div className="card-premium mt-16 overflow-hidden p-10 text-center sm:p-14">
+            <p className="eyebrow !text-[#8B6B3D]">Get In Touch</p>
+            <p className="body-lg mx-auto mt-3 max-w-xl text-navy-900">
+              Interested in early access or investment opportunities in
+              these upcoming developments?
+            </p>
+            <Link
+              href="/contact"
+              className="venture-cta btn-dark mt-7 inline-flex min-h-11 items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-2"
+            >
+              Register your interest
+              <ArrowUpRight className="venture-cta-arrow size-4" aria-hidden />
+            </Link>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

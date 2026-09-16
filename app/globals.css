@@ -344,6 +344,147 @@
   .text-pretty {
     text-wrap: pretty;
   }
+
+  /* -------------------------------------------------------
+     Future Ventures — card choreography and hover effects.
+     Used by future-ventures-page.tsx and FutureVenturesCarousel.tsx.
+     Previously an inline <style>{`...`}</style> tag in the page
+     component; moved here because a raw text-node <style> block can
+     cause a server/client hydration mismatch (React can encode certain
+     characters, like an apostrophe in a code comment, differently
+     between the server-rendered HTML and the client's hydrated text
+     node). A real stylesheet has no such text node to disagree over.
+     ------------------------------------------------------- */
+
+  .venture-number {
+    opacity: 0;
+    animation: ventureNumberIn 0.8s ease-out forwards;
+    animation-delay: var(--v-delay, 0.1s);
+  }
+
+  .venture-chip {
+    opacity: 0;
+    animation: ventureChipIn 0.5s cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
+    animation-delay: var(--v-delay, 0.15s);
+  }
+
+  .venture-stat {
+    opacity: 0;
+    animation: ventureStatIn 0.5s ease-out forwards;
+    animation-delay: var(--v-delay, 0.3s);
+  }
+
+  .venture-row {
+    opacity: 0;
+    animation: ventureRowIn 0.45s ease-out forwards;
+    animation-delay: var(--v-delay, 0.2s);
+  }
+
+  .venture-row-check {
+    transition:
+      transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1),
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  .venture-row:hover .venture-row-check {
+    transform: scale(1.15) rotate(-6deg);
+    background-color: #12213a;
+    color: #ffffff;
+  }
+
+  /* Card lift includes a very slight 3D tilt (fixed angles, not
+     mouse-tracked, so it stays pure CSS) for a more dimensional feel
+     than a flat translateY. The perspective ancestor is a plain
+     wrapper div placed just outside the card in the carousel. */
+  .venture-card {
+    transition:
+      transform 0.5s cubic-bezier(0.22, 0.85, 0.3, 1),
+      box-shadow 0.5s ease;
+    transform-style: preserve-3d;
+  }
+
+  .venture-card:hover {
+    transform: translateY(-6px) rotateX(1deg) rotateY(-1deg);
+    box-shadow: 0 30px 60px -30px rgba(18, 33, 58, 0.3);
+  }
+
+  /* Ambient glow drifts slowly on its own, independent of hover — gives
+     the dark panel a sense of quiet life rather than a static gradient,
+     and intensifies further on hover */
+  .venture-panel-glow {
+    background: radial-gradient(
+      ellipse 70% 60% at 15% 15%,
+      rgba(139, 107, 61, 0.22),
+      transparent 60%
+    );
+    opacity: 0.6;
+    animation: venturePanelDrift 9s ease-in-out infinite;
+    transition: opacity 0.5s ease;
+  }
+
+  .venture-card:hover .venture-panel-glow {
+    opacity: 1;
+  }
+
+  /* Diagonal sheen sweep across the whole card on hover */
+  .venture-sheen {
+    position: absolute;
+    inset: -20% -10%;
+    background: linear-gradient(
+      75deg,
+      transparent 42%,
+      rgba(255, 255, 255, 0.35) 50%,
+      transparent 58%
+    );
+    transform: translateX(-120%);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .venture-card:hover .venture-sheen {
+    opacity: 1;
+    transition:
+      transform 0.9s ease-out,
+      opacity 0.2s ease;
+    transform: translateX(120%);
+  }
+
+  /* Gradient border that fades in on hover, matching the same rounding
+     as the card itself via rounded-[inherit] so it never depends on
+     knowing card-premium's exact radius value */
+  .venture-border-glow {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      135deg,
+      rgba(139, 107, 61, 0.55),
+      transparent 40%,
+      transparent 60%,
+      rgba(76, 175, 109, 0.4)
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .venture-card:hover .venture-border-glow {
+    opacity: 1;
+  }
+
+  .venture-cta-arrow {
+    transition: transform 0.3s ease;
+  }
+
+  .venture-cta:hover .venture-cta-arrow {
+    transform: translate(2px, -2px);
+  }
 }
 
 /* =========================================================
@@ -359,6 +500,65 @@
   to {
     opacity: 1;
     transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes ventureNumberIn {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+
+  to {
+    opacity: 0.16;
+    transform: translateX(0);
+  }
+}
+
+@keyframes ventureChipIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.94);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes ventureStatIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ventureRowIn {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes venturePanelDrift {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  50% {
+    transform: translate(3%, 2%);
   }
 }
 
@@ -382,6 +582,34 @@
 
   .image-lift {
     transform: none !important;
+  }
+
+  /* Future Ventures cards: the blanket rule above already collapses
+     every animation/transition to near-zero duration, but a :hover
+     state's end value (the 3D tilt, the sheen's translateX) would
+     still apply instantly rather than being avoided outright — so
+     these are called out explicitly, same as .image-lift above. */
+  .venture-number {
+    opacity: 0.16;
+  }
+
+  .venture-chip,
+  .venture-stat,
+  .venture-row {
+    opacity: 1;
+    transform: none;
+  }
+
+  .venture-card:hover {
+    transform: none;
+  }
+
+  .venture-row:hover .venture-row-check {
+    transform: none;
+  }
+
+  .venture-sheen {
+    opacity: 0 !important;
   }
 }
 

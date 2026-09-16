@@ -1,10 +1,13 @@
+import { TeamMember } from "@/components/LeadershipSection";
+
+
 export const brand = {
   name: "Sentara Group",
   tagline: "Where Land Meets Legacy",
   phone: "+91 99492 11371",
   phoneRaw: "+919949211371",
   email: "rajendarrangu@sentaraprojects.com",
-  addressHQ: "6th Floor, G Square, Near Wells Fargo, Raidurg, Gachibowli, Hyderabad – 500032",
+  addressHQ: "Sentara, Ramanthapur, Hyderabad – 500013",
 };
 
 export const heroStats = [
@@ -15,7 +18,7 @@ export const heroStats = [
 ];
 
 export const chairman = {
-  name: "Rangu Rajendra Prasad",
+  name: "Mr. Rangu Rajendra Prasad",
   title: "Chairman & Managing Director — Sentara Group",
   subtitle: "Visionary Entrepreneur & Executive Leader",
   photo: "/images/team/chairman.jpg",
@@ -62,6 +65,28 @@ export const chairman = {
     },
   ],
 };
+
+/**
+ * Team roster for the homepage "Our Team" section (OurTeamSection component).
+ * Built from `chairman` above so there's a single source of truth — the
+ * About page keeps using `chairman` directly for its fuller profile
+ * (stats, roles, education, contact), while this array feeds the more
+ * compact, scalable team grid on the homepage.
+ *
+ * Add future hires here in the same shape. Only one entry should have
+ * `featured: true` at a time — that person gets the large spotlight
+ * treatment; everyone else renders in the grid below it.
+ */
+export const team: TeamMember[] = [
+  {
+    name: chairman.name,
+    title: chairman.title,
+    photo: chairman.photo,
+    bio: chairman.overview[0],
+    href: "/about",
+    featured: true,
+  },
+];
 
 export type ProjectStatus = "ongoing" | "completed" | "future";
 

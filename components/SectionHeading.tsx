@@ -15,7 +15,7 @@ export default function SectionHeading({
 }) {
   return (
     <Reveal
-      className={`max-w-2xl ${align === "center" ? "mx-auto text-center" : ""}`}
+      className={`max-w-3xl ${align === "center" ? "mx-auto text-center" : ""}`}
     >
       {eyebrow && <p className="eyebrow mb-3">{eyebrow}</p>}
       <h2 className={`heading-lg ${light ? "text-white" : ""}`}>{title}</h2>
