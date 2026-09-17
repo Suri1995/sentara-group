@@ -150,10 +150,58 @@ export const projects: ProjectSummary[] = [
   },
 ];
 
+/**
+ * "Luxurious Resort" and "Residential Plots Layout" below are the two
+ * halves of Kakatiya by Sentara — a 150-acre weekend-villa and resort
+ * masterplan at Konapuram, M. Turkapally, Yadadri Bhuvanagiri, built
+ * around the site's natural hill contours (120-acre villa community +
+ * a separate 30-acre hilltop resort zone). Each entry's `image` is an
+ * indicative render (masterplan / concept), not on-site photography —
+ * these ventures are still in planning.
+ */
 export const futureVentures = [
+  {
+    title: "Luxurious Resort",
+    location: "Konapuram, M. Turkapally, Yadadri Bhuvanagiri",
+    image: "/images/turkapally/resort.jpeg",
+    description:
+      "Kakatiya by Sentara is a 150-acre weekend-villa and resort masterplan at M. Turkapally, split into a 120-acre villa community and a 30-acre hilltop resort. Set on the site's highest natural contours for panoramic views and complete privacy, this resort zone is envisioned as a quiet, biophilic retreat built around a resort-grade clubhouse, themed gardens and dedicated wellness spaces.",
+    stats: [
+      { value: "150 AC", label: "Total Masterplan" },
+      { value: "30 AC", label: "Hilltop Resort Zone" },
+      { value: "25,000 SFT", label: "Central Clubhouse" },
+    ],
+    highlights: [
+      "150-acre Kakatiya masterplan: 120-acre villa community + 30-acre hilltop resort",
+      "Set on the site's elevated natural contours for panoramic views & privacy",
+      "25,000 sft clubhouse with leisure, wellness, dining, library and gym",
+      "10 acres of themed parks, herbal and aroma gardens, and walking trails",
+      "Proposed 5-acre helipad / eVTOL zone with work-from-the-hills spaces",
+    ],
+  },
+  {
+    title: "Residential Plots Layout",
+    location: "Konapuram, M. Turkapally, Yadadri Bhuvanagiri",
+    image: "/images/turkapally/plotting-villa.jpeg",
+    description:
+      "Kakatiya by Sentara is a 150-acre weekend-villa and resort masterplan at M. Turkapally, split into a 120-acre villa community and a 30-acre hilltop resort. This villa community is terraced along the property's natural hill contours for elevated views and everyday privacy, with generous 2,500 sq. yd. plots each carrying a 2,500 sft biophilic glass villa.",
+    stats: [
+      { value: "150 AC", label: "Total Masterplan" },
+      { value: "120 AC", label: "Villa Community" },
+      { value: "2,500", label: "Sq. Yd. Villa Plots" },
+    ],
+    highlights: [
+      "150-acre Kakatiya masterplan: 120-acre villa community + 30-acre hilltop resort",
+      "Natural hill contours shaped into terraced plots for elevated views & privacy",
+      "2,500 sft biophilic glass villa on every plot",
+      "Tree-lined plot edges in place of wall-heavy boundaries",
+      "Private landscaped gardens with lawns, thin creepers and circular flower ponds",
+    ],
+  },
   {
     title: "High-Rise Residential Tower",
     location: "Vanasthali Hills, Nagole, Hyderabad",
+    image: "/images/turkapally/vanasthalihills.jpeg",
     description:
       "A green, high-rise residential tower with 2 Cellars + 1 Stilt + 10 Upper Floors, comprising all 4 BHK ultra-luxurious flats, designed by the renowned FHD Group. Exclusive duplex Sky-Villas (5,000–6,000 sq. ft.) crown floors 9 & 10 with panoramic forest views.",
     stats: [
@@ -167,39 +215,6 @@ export const futureVentures = [
       "Dedicated clubhouse with premium health, wellness & social spaces",
       "Close proximity to Nagole Metro Station & ORR Interchange No. 10",
       "40 feet wide roads on all three sides for smooth traffic flow and ventilation",
-    ],
-  },
-  {
-    title: "Luxurious Resort",
-    location: "Konapuram, M. Turkapally, Yadadri Bhuvanagiri",
-    description:
-      "A pioneering, lavish resort spread over 30 acres of lush green land east of Hyderabad, designed as the region's premier venue for destination weddings, corporate events, and leisure & adventure sports across all age groups.",
-    stats: [
-      { value: "30 AC", label: "Lush Green Resort Land" },
-      { value: "3+", label: "Tourism Landmarks Nearby" },
-      { value: "NH-163", label: "Major Highway Connectivity" },
-    ],
-    highlights: [
-      "Proximity to the world-famous Yadadri Temple & Swarnagiri Temple",
-      "Near Baswapur reservoir and the proposed Gandhamalla reservoir",
-      "Well connected via NH-163, SH-1, RRR at Peerlapalli & ORR-8 at Keesara",
-    ],
-  },
-  {
-    title: "Residential Plots Layout",
-    location: "Konapuram, M. Turkapally, Yadadri Bhuvanagiri",
-    description:
-      "A premium 100-acre, concept-based gated open-plot development as per HMDA planning norms, with elite plots of 1,000 sq. yards within a lush, eco-friendly ecosystem — complete with weekend homes and a themed clubhouse precinct.",
-    stats: [
-      { value: "100 AC", label: "Gated Plot Development" },
-      { value: "1,000", label: "Sq. Yd. Each Plot" },
-      { value: "10 AC", label: "Clubhouse & Theme Parks" },
-    ],
-    highlights: [
-      "Every plot designed for ornamental & fruit-yielding trees",
-      "Provision for ready-to-build houses",
-      "Free clubhouse membership; 5 years of plot & road maintenance included",
-      "Graded 40 ft / 60 ft / 100 ft wide road network",
     ],
   },
 ];

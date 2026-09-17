@@ -66,14 +66,14 @@ export default function Carousel({
           />
           <div className="absolute inset-0 bg-hero-scrim" />
           {(slide.caption || slide.subcaption) && (
-            <div className="absolute bottom-8 left-8 right-8 text-white sm:bottom-12 sm:left-12">
+            <div className="absolute bottom-8 left-8 right-8 text-white sm:bottom-12 sm:left-12 bg-white w-fit p-4 rounded-3xl">
               {slide.subcaption && (
-                <p className="mb-2 text-xs font-semibold uppercase tracking-[0.3em] text-green-300">
+                <p className="mb-2 text-xs font-semibold uppercase tracking-[0.3em] text-green">
                   {slide.subcaption}
                 </p>
               )}
               {slide.caption && (
-                <p className="font-display text-2xl sm:text-3xl">{slide.caption}</p>
+                <p className="font-display text-navy text-2xl sm:text-3xl">{slide.caption}</p>
               )}
             </div>
           )}

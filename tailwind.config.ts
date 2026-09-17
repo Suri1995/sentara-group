@@ -70,7 +70,7 @@ const config: Config = {
           "linear-gradient(135deg, #0b2452 0%, #12305e 45%, #0a4c29 130%)",
 
         "hero-scrim":
-          "linear-gradient(180deg, rgba(7,18,40,0.15) 0%, rgba(7,18,40,0.55) 55%, rgba(7,18,40,0.9) 100%)",
+          "linear-gradient(180deg, rgba(7,18,40,0.15) 0%, rgba(7,18,40,0.15) 55%, rgba(7,18,40,0.10) 100%)",
       },
 
       keyframes: {
