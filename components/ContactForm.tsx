@@ -3,6 +3,21 @@
 import { useState } from "react";
 import { projects } from "@/lib/data";
 
+// Projects that should NOT appear in the "I'm interested in" dropdown.
+// Matching ignores case, spaces and hyphens, so "Arunjyothi", "Arun Jyothi"
+// and "arun-jyothi" are all caught (and any name that contains it).
+const HIDDEN_PROJECTS = ["arunjyothi"];
+
+const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]/g, "");
+
+const interestOptions = projects.filter(
+  (p) =>
+    !HIDDEN_PROJECTS.some(
+      (hidden) =>
+        normalize(p.slug).includes(hidden) || normalize(p.name).includes(hidden),
+    ),
+);
+
 export default function ContactForm() {
   const [status, setStatus] = useState<"idle" | "submitting" | "sent">("idle");
 
@@ -70,7 +85,7 @@ export default function ContactForm() {
           I&rsquo;m interested in
         </label>
         <select className="w-full rounded-xl border border-navy-200 bg-white px-4 py-3.5 text-sm text-navy-900 outline-none transition-colors focus:border-green-500">
-          {projects.map((p) => (
+          {interestOptions.map((p) => (
             <option key={p.slug} value={p.name}>
               {p.name}
             </option>
