@@ -68,12 +68,6 @@ function VentureCard({
               <MapPin className="size-3 flex-none text-[#D9B26A]" aria-hidden />
               {venture.location.split(",")[0]}
             </span>
-            <span
-              aria-hidden
-              className="absolute bottom-3 right-4 font-display text-xs tabular-nums text-white/70"
-            >
-              {order}
-            </span>
           </div>
         )}
 

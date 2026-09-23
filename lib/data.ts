@@ -163,7 +163,7 @@ export const futureVentures = [
   {
     title: "Luxurious Resort",
     location: "Konapuram, M. Turkapally, Yadadri Bhuvanagiri",
-    image: "/images/turkapally/resort.jpeg",
+    image: "/images/turkapally/resort.png",
     description:
       "Kakatiya by Sentara is a 150-acre weekend-villa and resort masterplan at M. Turkapally, split into a 120-acre villa community and a 30-acre hilltop resort. Set on the site's highest natural contours for panoramic views and complete privacy, this resort zone is envisioned as a quiet, biophilic retreat built around a resort-grade clubhouse, themed gardens and dedicated wellness spaces.",
     stats: [
@@ -180,15 +180,15 @@ export const futureVentures = [
     ],
   },
   {
-    title: "Residential Plots Layout",
+    title: "Weekend Villas",
     location: "Konapuram, M. Turkapally, Yadadri Bhuvanagiri",
     image: "/images/turkapally/plotting-villa.jpeg",
     description:
-      "Kakatiya by Sentara is a 150-acre weekend-villa and resort masterplan at M. Turkapally, split into a 120-acre villa community and a 30-acre hilltop resort. This villa community is terraced along the property's natural hill contours for elevated views and everyday privacy, with generous 2,500 sq. yd. plots each carrying a 2,500 sft biophilic glass villa.",
+      "Kakatiya by Sentara is a 150-acre weekend-villa and resort masterplan at M. Turkapally, split into a 120-acre villa community and a 30-acre hilltop resort. This villa community is terraced along the property's natural hill contours for elevated views and everyday privacy, with generous 1,500 sq. yd. plots each carrying a 2,500 sft biophilic glass villa.",
     stats: [
       { value: "150 AC", label: "Total Masterplan" },
       { value: "120 AC", label: "Villa Community" },
-      { value: "2,500", label: "Sq. Yd. Villa Plots" },
+      { value: "1,500", label: "Sq. Yd. Villa Plots" },
     ],
     highlights: [
       "150-acre Kakatiya masterplan: 120-acre villa community + 30-acre hilltop resort",
