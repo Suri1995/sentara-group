@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, MapPin } from "lucide-react";
+import Link from "next/link";
+import { ArrowUpRight, ChevronLeft, ChevronRight, MapPin } from "lucide-react";
 import StatCounter from "@/components/StatCounter";
 
 interface VentureStat {
@@ -19,238 +20,330 @@ interface Venture {
   highlights: string[];
 }
 
+const AUTOPLAY_MS = 8000;
+const EASE = "cubic-bezier(.22,1,.36,1)";
+
 /**
- * Horizontal, snap-scrolling carousel showing exactly one venture card
- * at a time, at every viewport width from 360px up to 1920px — each
- * slide is always w-full, so there's no breakpoint at which more than
- * one becomes visible. Prev/next buttons, a slide counter and dot
- * navigation sit below.
+ * Motion layer — plain CSS, no extra dependencies, all rules `fv-` prefixed.
  *
- * Each slide is a two-column editorial spread on md+: a full-bleed
- * concept render on the left (with a bottom gradient for legible
- * overlaid title/location) and a content panel on the right carrying
- * the description, a spec-sheet stat strip and a labelled highlights
- * list. On mobile the image sits on top and the content stacks below.
- * Ventures without an `image` (e.g. very early-stage concepts) fall
- * back to the original dark navy panel so the component still renders
- * cleanly either way.
- *
- * This is a client component specifically so it can own scroll position
- * and button state; the page that renders it (future-ventures-page.tsx)
- * stays a server component so it can keep exporting `metadata` — Next.js
- * doesn't allow a "use client" page to do that.
+ * The one orchestrated moment: when a slide becomes active the image
+ * settles from a slow zoom, the glass title card rises, and the content
+ * cascades in. Tilt, spotlight, parallax and the autoplay fill respond to
+ * the person's input or mark time. Everything is off under reduced-motion.
  */
+const css = `
+.fv-slide .fv-item{opacity:0;transform:translateY(24px);filter:blur(6px);
+  transition:opacity .9s ${EASE} var(--d,0s),transform .9s ${EASE} var(--d,0s),filter .9s ${EASE} var(--d,0s)}
+.fv-slide[data-active="true"] .fv-item{opacity:1;transform:none;filter:none}
+
+.fv-slide .fv-img{transform:scale(1.14);transition:transform 2.4s ${EASE}}
+.fv-slide[data-active="true"] .fv-img{transform:scale(1)}
+.fv-slide[data-active="true"] .fv-card:hover .fv-img{transform:scale(1.04);transition-duration:1.4s}
+
+.fv-slide .fv-tick{stroke-dasharray:24;stroke-dashoffset:24;transition:stroke-dashoffset .7s ${EASE} var(--d,0s)}
+.fv-slide[data-active="true"] .fv-tick{stroke-dashoffset:0}
+
+.fv-card{transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));
+  transition:transform .6s ${EASE},box-shadow .6s ${EASE};transform-style:preserve-3d}
+.fv-card:hover{box-shadow:0 50px 90px -45px rgba(11,31,58,.5)}
+.fv-spot{opacity:0;transition:opacity .5s ease;
+  background:radial-gradient(560px circle at var(--mx,50%) var(--my,50%),rgba(217,178,106,.14),transparent 60%)}
+.fv-card:hover .fv-spot{opacity:1}
+
+.fv-cta .fv-sheen{transform:translateX(-120%) skewX(-18deg);transition:transform .9s ${EASE}}
+.fv-cta:hover .fv-sheen,.fv-cta:focus-visible .fv-sheen{transform:translateX(220%) skewX(-18deg)}
+
+.fv-fill{transform-origin:left;animation:fv-fill ${AUTOPLAY_MS}ms linear forwards}
+@keyframes fv-fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.fv-pulse{animation:fv-pulse 2.4s ease-out infinite}
+@keyframes fv-pulse{0%{box-shadow:0 0 0 0 rgba(217,178,106,.7)}100%{box-shadow:0 0 0 10px rgba(217,178,106,0)}}
+
+@media (prefers-reduced-motion:reduce){
+  .fv-slide .fv-item,.fv-slide .fv-img,.fv-slide .fv-tick{
+    opacity:1;transform:none;filter:none;stroke-dashoffset:0;transition:none}
+  .fv-card{transform:none!important}
+  .fv-fill,.fv-pulse{animation:none}
+  .fv-fill{transform:scaleX(1)}
+  .fv-cta .fv-sheen{transition:none}
+}
+`;
+
 export default function FutureVenturesCarousel({
   ventures,
 }: {
   ventures: Venture[];
 }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const parallaxRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [canPrev, setCanPrev] = useState(false);
-  const [canNext, setCanNext] = useState(ventures.length > 1);
+  const [paused, setPaused] = useState(false);
 
-  const updateScrollState = () => {
+  const count = ventures.length;
+
+  const handleScroll = () => {
     const el = scrollerRef.current;
-    if (!el) return;
-    setCanPrev(el.scrollLeft > 4);
-    setCanNext(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
-    const step = el.clientWidth;
-    if (step > 0) setActiveIndex(Math.round(el.scrollLeft / step));
+    if (!el || el.clientWidth === 0) return;
+    const w = el.clientWidth;
+    setActiveIndex(Math.round(el.scrollLeft / w));
+    // Image drifts slower than the slide — a subtle depth cue while swiping
+    parallaxRefs.current.forEach((node, i) => {
+      if (node) node.style.transform = `translate3d(${(el.scrollLeft - i * w) * 0.06}px,0,0)`;
+    });
   };
-
-  useEffect(() => {
-    updateScrollState();
-    const el = scrollerRef.current;
-    if (!el) return;
-    el.addEventListener("scroll", updateScrollState, { passive: true });
-    window.addEventListener("resize", updateScrollState);
-    return () => {
-      el.removeEventListener("scroll", updateScrollState);
-      window.removeEventListener("resize", updateScrollState);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ventures.length]);
 
   const goTo = (index: number) => {
     const el = scrollerRef.current;
     if (!el) return;
-    el.scrollTo({ left: index * el.clientWidth, behavior: "smooth" });
+    const next = (index + count) % count;
+    el.scrollTo({ left: next * el.clientWidth, behavior: "smooth" });
   };
 
-  const step = (direction: 1 | -1) => {
-    goTo(Math.max(0, Math.min(ventures.length - 1, activeIndex + direction)));
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== "mouse") return;
+    const card = e.currentTarget;
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width;
+    const y = (e.clientY - r.top) / r.height;
+    card.style.setProperty("--mx", `${x * 100}%`);
+    card.style.setProperty("--my", `${y * 100}%`);
+    card.style.setProperty("--ry", `${(x - 0.5) * 3}deg`);
+    card.style.setProperty("--rx", `${(0.5 - y) * 2}deg`);
   };
 
-  const pad = (n: number) => String(n).padStart(2, "0");
+  const onPointerLeave = (e: React.PointerEvent<HTMLDivElement>) => {
+    e.currentTarget.style.setProperty("--rx", "0deg");
+    e.currentTarget.style.setProperty("--ry", "0deg");
+  };
+
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowRight") goTo(activeIndex + 1);
+    if (e.key === "ArrowLeft") goTo(activeIndex - 1);
+  };
 
   return (
-    <div className="relative">
+    <div
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Future ventures"
+      tabIndex={0}
+      onKeyDown={onKeyDown}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={() => setPaused(false)}
+      className="relative rounded-[2rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8B6B3D]/50 focus-visible:ring-offset-4"
+    >
+      <style dangerouslySetInnerHTML={{ __html: css }} />
+
       <div
         ref={scrollerRef}
-        className="
-          flex snap-x snap-mandatory overflow-x-auto scroll-smooth
-          [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
-        "
+        onScroll={handleScroll}
+        className="flex snap-x snap-mandatory overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        {ventures.map((v, i) => (
-          <div key={v.title} className="w-full flex-none snap-center px-0.5">
-            {/* perspective ancestor for the card's 3D hover tilt */}
-            <div style={{ perspective: "1600px" }}>
-              <div className="venture-card group relative card-premium overflow-hidden">
-                <span aria-hidden className="venture-border-glow pointer-events-none" />
-                <span aria-hidden className="venture-sheen pointer-events-none" />
+        {ventures.map((v, i) => {
+          const active = i === activeIndex;
+          return (
+            <div
+              key={v.title}
+              data-active={active}
+              aria-hidden={!active}
+              className="fv-slide w-full flex-none snap-center px-1 py-8"
+            >
+              <div style={{ perspective: "1800px" }}>
+                <div
+                  onPointerMove={onPointerMove}
+                  onPointerLeave={onPointerLeave}
+                  className="fv-card group relative overflow-hidden rounded-[2rem] border border-navy-900/10 bg-white p-3 shadow-[0_30px_70px_-45px_rgba(11,31,58,0.45)] sm:p-4"
+                >
+                  <span aria-hidden className="fv-spot pointer-events-none absolute inset-0 z-20" />
 
-                <div className="relative grid grid-cols-1 md:grid-cols-[1.05fr_1fr]">
-                  {/* ---------------- Image panel ---------------- */}
-                  <div className="relative min-h-[280px] overflow-hidden bg-navy-gradient sm:min-h-[340px] md:min-h-0">
-                    {v.image ? (
-                      <>
-                        <Image
-                          src={v.image}
-                          alt={v.title}
-                          fill
-                          sizes="(min-width: 768px) 50vw, 100vw"
-                          className="object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-[1.04]"
-                          priority={i === 0}
-                        />
+                  <div className="relative grid grid-cols-1 gap-3 md:grid-cols-[1.08fr_1fr] md:gap-5">
+                    {/* ---------- Framed image ---------- */}
+                    <div className="relative min-h-[360px] overflow-hidden rounded-[1.5rem] bg-navy-900 sm:min-h-[440px] md:min-h-[620px]">
+                      {v.image && (
                         <div
-                          aria-hidden
-                          className="absolute inset-0 bg-gradient-to-t from-navy-950/90 via-navy-950/15 to-navy-950/10"
-                        />
-                        <div
-                          aria-hidden
-                          className="absolute inset-0 bg-gradient-to-r from-navy-950/10 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:via-transparent md:to-navy-950/25"
-                        />
-                      </>
-                    ) : (
+                          ref={(n) => {
+                            parallaxRefs.current[i] = n;
+                          }}
+                          className="absolute inset-y-0 -inset-x-[12%] will-change-transform"
+                        >
+                          <Image
+                            src={v.image}
+                            alt={v.title}
+                            fill
+                            sizes="(min-width: 768px) 55vw, 100vw"
+                            className="fv-img object-cover"
+                            priority={i === 0}
+                          />
+                        </div>
+                      )}
                       <div
                         aria-hidden
-                        className="venture-panel-glow pointer-events-none absolute inset-0"
+                        className="absolute inset-0 bg-gradient-to-t from-navy-950/70 via-transparent to-navy-950/20"
                       />
-                    )}
 
-                    <div className="relative flex h-full flex-col justify-end p-8 text-white sm:p-10 lg:p-12">
                       <span
-                        className="venture-chip chip mb-4 inline-flex w-fit items-center gap-1.5 border-white/30 bg-white/10 text-white backdrop-blur-sm"
-                        style={{ ["--v-delay" as any]: `${0.2 + i * 0.06}s` }}
+                        className="fv-item absolute left-5 top-5 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3.5 py-1.5 text-xs font-medium text-white backdrop-blur-md"
+                        style={{ ["--d" as any]: "0.15s" }}
                       >
-                        Proposed · {v.location.split(",")[0]}
+                        <span className="fv-pulse size-1.5 rounded-full bg-[#D9B26A]" aria-hidden />
+                        Proposed development
                       </span>
 
-                      <h3 className="font-display text-2xl sm:text-3xl">
-                        {v.title}
-                      </h3>
-
-                      <p className="mt-2 flex items-start gap-1.5 text-[13px] text-white/70">
-                        <MapPin className="mt-0.5 size-3.5 flex-none text-[#D9B26A]" aria-hidden />
-                        {v.location}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* ---------------- Content panel ---------------- */}
-                  <div className="relative p-8 sm:p-10 lg:p-12">
-                    <p className="body-lg">{v.description}</p>
-
-                    <div className="mt-7 grid grid-cols-3 divide-x divide-navy-900/10 border-y border-navy-900/10 py-5">
-                      {v.stats.map((s, si) => (
+                      {/* glass title card */}
+                      <div className="absolute inset-x-4 bottom-4 z-10 sm:inset-x-5 sm:bottom-5">
                         <div
-                          key={s.label}
-                          className="venture-stat px-3 text-center first:pl-0 last:pr-0"
-                          style={{
-                            ["--v-delay" as any]: `${0.35 + i * 0.06 + si * 0.06}s`,
-                          }}
+                          className="fv-item rounded-2xl border border-white/20 bg-navy-950/35 p-5 text-white shadow-[0_20px_50px_-20px_rgba(0,0,0,0.6)] backdrop-blur-xl sm:p-6"
+                          style={{ ["--d" as any]: "0.3s" }}
                         >
-                          <StatCounter value={s.value} label={s.label} />
+                          <h3 className="max-w-[20ch] text-balance font-display text-2xl leading-[1.12] sm:text-3xl">
+                            {v.title}
+                          </h3>
+                          <p className="mt-2.5 flex items-start gap-1.5 text-[13px] text-white/80">
+                            <MapPin className="mt-0.5 size-3.5 flex-none text-[#D9B26A]" aria-hidden />
+                            {v.location}
+                          </p>
                         </div>
-                      ))}
+                      </div>
                     </div>
 
-                    <div className="mt-6 flex items-center gap-3">
-                      <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-[#8B6B3D]">
+                    {/* ---------- Content ---------- */}
+                    <div className="relative flex flex-col p-4 sm:p-6 lg:p-8">
+                      <div
+                        className="fv-item flex items-center gap-3"
+                        style={{ ["--d" as any]: "0.25s" }}
+                      >
+                        <span className="h-px w-8 bg-[#8B6B3D]" aria-hidden />
+                        <span className="text-sm font-medium text-[#8B6B3D]">The vision</span>
+                      </div>
+
+                      <p
+                        className="fv-item mt-5 text-[17px] leading-8 text-navy-700"
+                        style={{ ["--d" as any]: "0.35s" }}
+                      >
+                        {v.description}
+                      </p>
+
+                      <div className="mt-8 grid grid-cols-3 gap-2.5 sm:gap-3">
+                        {v.stats.map((s, si) => (
+                          <div
+                            key={s.label}
+                            className="fv-item rounded-2xl border border-navy-900/5 bg-sand-50 px-2 py-4 text-center transition-colors duration-300 hover:bg-[#8B6B3D]/10 sm:px-3"
+                            style={{ ["--d" as any]: `${0.45 + si * 0.08}s` }}
+                          >
+                            <StatCounter value={s.value} label={s.label} />
+                          </div>
+                        ))}
+                      </div>
+
+                      <p
+                        className="fv-item mt-8 text-sm font-medium text-navy-900"
+                        style={{ ["--d" as any]: "0.6s" }}
+                      >
                         Highlights
-                      </span>
-                      <span className="h-px flex-1 bg-navy-900/10" aria-hidden />
-                    </div>
+                      </p>
 
-                    <ul className="mt-5 space-y-3">
-                      {v.highlights.map((h, hi) => (
-                        <li
-                          key={h}
-                          className="venture-row flex items-start gap-3 text-sm text-navy-700 transition-transform duration-300 group-hover:translate-x-0.5"
-                          style={{
-                            ["--v-delay" as any]: `${0.3 + i * 0.06 + hi * 0.07}s`,
-                          }}
+                      <ul className="mt-4 space-y-3.5">
+                        {v.highlights.map((h, hi) => (
+                          <li
+                            key={h}
+                            className="fv-item flex items-start gap-3.5 text-sm leading-6 text-navy-700"
+                            style={{ ["--d" as any]: `${0.65 + hi * 0.08}s` }}
+                          >
+                            <span className="mt-0.5 flex size-6 flex-none items-center justify-center rounded-full bg-[#8B6B3D]/10 text-[#8B6B3D]">
+                              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden>
+                                <path
+                                  className="fv-tick"
+                                  style={{ ["--d" as any]: `${0.8 + hi * 0.08}s` }}
+                                  d="M5 13l4 4L19 7"
+                                  stroke="currentColor"
+                                  strokeWidth="2.6"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                              </svg>
+                            </span>
+                            {h}
+                          </li>
+                        ))}
+                      </ul>
+
+                      <div
+                        className="fv-item mt-auto pt-9"
+                        style={{ ["--d" as any]: `${0.75 + v.highlights.length * 0.08}s` }}
+                      >
+                        <Link
+                          href="/contact"
+                          tabIndex={active ? 0 : -1}
+                          className="fv-cta group/cta relative inline-flex min-h-12 items-center gap-3 overflow-hidden rounded-full bg-navy-900 py-1.5 pl-6 pr-1.5 text-sm font-medium text-white transition-shadow duration-500 hover:shadow-[0_18px_40px_-18px_rgba(11,31,58,0.7)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8B6B3D]/60 focus-visible:ring-offset-2"
                         >
-                          <span className="venture-row-check mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-green-50 text-green-600">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                              <path
-                                d="M5 13l4 4L19 7"
-                                stroke="currentColor"
-                                strokeWidth="2.4"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
+                          <span
+                            aria-hidden
+                            className="fv-sheen pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-white/20"
+                          />
+                          <span className="relative">Enquire about this venture</span>
+                          <span className="relative flex size-9 items-center justify-center rounded-full bg-[#D9B26A] text-navy-950 transition-transform duration-500 group-hover/cta:rotate-45">
+                            <ArrowUpRight className="size-4" aria-hidden />
                           </span>
-                          {h}
-                        </li>
-                      ))}
-                    </ul>
+                        </Link>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
-      {/* Prev/next + slide counter + dots — only shown when there's more
-          than one slide */}
-      {ventures.length > 1 && (
-        <div className="mt-8 flex items-center justify-center gap-5 sm:mt-10">
+      {/* ---------- Controls: arrows + pill tabs, active tab fills as autoplay progress ---------- */}
+      {count > 1 && (
+        <div className="mt-4 flex items-center gap-3 sm:gap-4">
           <button
             type="button"
-            onClick={() => step(-1)}
-            disabled={!canPrev}
+            onClick={() => goTo(activeIndex - 1)}
             aria-label="Previous venture"
-            className="flex size-11 flex-none items-center justify-center rounded-full border border-navy-900/15 bg-white text-navy-900 shadow-sm transition-all duration-300 hover:border-navy-900/0 hover:bg-navy-900 hover:text-white hover:shadow-[0_10px_24px_-12px_rgba(11,31,58,0.5)] disabled:pointer-events-none disabled:opacity-30 disabled:shadow-none"
+            className="flex size-12 flex-none items-center justify-center rounded-full border border-navy-900/10 bg-white text-navy-900 shadow-sm transition-all duration-300 hover:-translate-x-0.5 hover:bg-navy-900 hover:text-white"
           >
             <ChevronLeft className="size-4" aria-hidden />
           </button>
 
-          <div className="flex items-center gap-4">
-            <span className="hidden font-display text-xs tabular-nums tracking-wide text-navy-900/50 sm:inline">
-              {pad(activeIndex + 1)}
-              <span className="mx-1 text-navy-900/25">/</span>
-              {pad(ventures.length)}
-            </span>
-
-            <div className="flex items-center gap-2">
-              {ventures.map((v, i) => (
+          <div className="flex flex-1 gap-1.5 rounded-full border border-navy-900/10 bg-white p-1.5 shadow-sm">
+            {ventures.map((v, i) => {
+              const active = i === activeIndex;
+              return (
                 <button
                   key={v.title}
                   type="button"
                   onClick={() => goTo(i)}
                   aria-label={`Go to ${v.title}`}
-                  aria-current={i === activeIndex}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${
-                    i === activeIndex
-                      ? "w-7 bg-[#8B6B3D]"
-                      : "w-1.5 bg-navy-900/20 hover:bg-navy-900/35"
+                  aria-current={active}
+                  className={`relative flex-1 overflow-hidden rounded-full px-3 py-3 text-center text-[13px] transition-colors duration-300 sm:px-5 sm:text-sm ${
+                    active
+                      ? "bg-sand-50 font-medium text-navy-900"
+                      : "text-navy-900/50 hover:text-navy-900"
                   }`}
-                />
-              ))}
-            </div>
+                >
+                  {active && (
+                    <span
+                      key={activeIndex}
+                      aria-hidden
+                      className="fv-fill absolute inset-0 bg-[#8B6B3D]/15"
+                      style={{ animationPlayState: paused ? "paused" : "running" }}
+                      onAnimationEnd={() => goTo(activeIndex + 1)}
+                    />
+                  )}
+                  <span className="relative block truncate">{v.title}</span>
+                </button>
+              );
+            })}
           </div>
 
           <button
             type="button"
-            onClick={() => step(1)}
-            disabled={!canNext}
+            onClick={() => goTo(activeIndex + 1)}
             aria-label="Next venture"
-            className="flex size-11 flex-none items-center justify-center rounded-full border border-navy-900/15 bg-white text-navy-900 shadow-sm transition-all duration-300 hover:border-navy-900/0 hover:bg-navy-900 hover:text-white hover:shadow-[0_10px_24px_-12px_rgba(11,31,58,0.5)] disabled:pointer-events-none disabled:opacity-30 disabled:shadow-none"
+            className="flex size-12 flex-none items-center justify-center rounded-full border border-navy-900/10 bg-white text-navy-900 shadow-sm transition-all duration-300 hover:translate-x-0.5 hover:bg-navy-900 hover:text-white"
           >
             <ChevronRight className="size-4" aria-hidden />
           </button>

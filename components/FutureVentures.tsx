@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, ArrowUpRight, MapPin } from "lucide-react";
@@ -19,77 +19,101 @@ interface Venture {
   stats: VentureStat[];
 }
 
+const EASE = "cubic-bezier(.22,1,.36,1)";
+
+const css = `
+.fvh-spot{opacity:0;transition:opacity .5s ease;
+  background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(217,178,106,.16),transparent 62%)}
+.fvh-card:hover .fvh-spot{opacity:1}
+
+/* a thin light travels across the top edge of the image on hover */
+.fvh-sweep{transform:translateX(-101%);transition:transform 1.1s ${EASE}}
+.fvh-card:hover .fvh-sweep{transform:translateX(101%)}
+
+.fvh-link-line{transform:scaleX(0);transform-origin:left;transition:transform .5s ${EASE}}
+.fvh-link:hover .fvh-link-line,.fvh-link:focus-visible .fvh-link-line{transform:scaleX(1)}
+
+@media (prefers-reduced-motion:reduce){
+  .fvh-sweep,.fvh-link-line{transition:none}
+}
+`;
+
 function VentureCard({
   venture,
-  index,
   delay,
 }: {
   venture: Venture;
-  index: number;
   delay: number;
 }) {
   const [expanded, setExpanded] = useState(false);
-  const order = String(index + 1).padStart(2, "0");
+  const textRef = useRef<HTMLParagraphElement>(null);
+  const isLong = venture.description.length > 140;
+
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== "mouse") return;
+    const r = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty("--mx", `${((e.clientX - r.left) / r.width) * 100}%`);
+    e.currentTarget.style.setProperty("--my", `${((e.clientY - r.top) / r.height) * 100}%`);
+  };
+
+  // Measured height lets the description grow and shrink smoothly
+  const textMaxHeight = !isLong
+    ? undefined
+    : expanded
+      ? `${textRef.current?.scrollHeight ?? 640}px`
+      : "5.25rem";
 
   return (
-    <Reveal
-      delay={delay}
-      className="group relative flex h-full flex-col self-start bg-sand-50 transition-transform duration-500 ease-out will-change-transform hover:-translate-y-[3px]"
-    >
-      {/* Drafting-pen corners — short brackets that extend along both
-          edges on hover, as if the plan is being outlined. A single
-          orchestrated hover moment rather than a stock shadow-lift. */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute left-0 top-0 z-10 h-4 w-4 border-l border-t border-white/40 transition-all duration-500 ease-out group-hover:h-8 group-hover:w-8 group-hover:border-green sm:h-5 sm:w-5 sm:group-hover:h-9 sm:group-hover:w-9"
-      />
-      <span
-        aria-hidden
-        className="pointer-events-none absolute bottom-0 right-0 h-4 w-4 border-b border-r border-navy/20 transition-all duration-500 ease-out group-hover:h-8 group-hover:w-8 group-hover:border-green sm:h-5 sm:w-5 sm:group-hover:h-9 sm:group-hover:w-9"
-      />
+    <Reveal delay={delay} className="group relative flex h-full flex-col">
+      <div
+        onPointerMove={onPointerMove}
+        className="fvh-card relative flex flex-1 flex-col overflow-hidden rounded-[1.75rem] border border-navy/10 bg-white p-3 shadow-[0_24px_50px_-38px_rgba(11,31,58,0.45)] transition-all duration-500 ease-out hover:-translate-y-1.5 hover:border-navy/20 hover:shadow-[0_44px_80px_-42px_rgba(11,31,58,0.55)]"
+      >
+        <span aria-hidden className="fvh-spot pointer-events-none absolute inset-0 z-20" />
 
-      <div className="flex flex-1 flex-col border border-navy/10 transition-colors duration-500 group-hover:border-navy/20">
-        {/* Image strip — concept render with a bottom gradient so the
-            order badge and location chip stay legible over any photo */}
         {venture.image && (
-          <div className="relative aspect-[16/10] w-full overflow-hidden bg-navy-900">
+          <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[1.25rem] bg-navy-900">
             <Image
               src={venture.image}
               alt={venture.title}
               fill
               sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-              className="object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-[1.05]"
+              className="object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-[1.06]"
             />
             <div
               aria-hidden
-              className="absolute inset-0 bg-gradient-to-t from-navy-950/75 via-navy-950/5 to-transparent"
+              className="absolute inset-0 bg-gradient-to-t from-navy-950/70 via-navy-950/5 to-transparent"
             />
-            <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/10 px-3 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
+            <span
+              aria-hidden
+              className="fvh-sweep absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent"
+            />
+
+            <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[11px] font-medium text-white backdrop-blur-md">
               <MapPin className="size-3 flex-none text-[#D9B26A]" aria-hidden />
               {venture.location.split(",")[0]}
+            </span>
+
+            <span
+              aria-hidden
+              className="absolute bottom-4 right-4 flex size-10 items-center justify-center rounded-full border border-white/30 bg-white/15 text-white opacity-0 backdrop-blur-md transition-all duration-500 ease-out group-hover:translate-y-0 group-hover:opacity-100 translate-y-2"
+            >
+              <ArrowUpRight className="size-4" />
             </span>
           </div>
         )}
 
-        <div className="flex flex-1 flex-col p-6 sm:p-7 lg:p-8">
+        <div className="flex flex-1 flex-col p-4 sm:p-5 lg:p-6">
           {!venture.image && (
-            <div className="flex items-start justify-between gap-4">
-              <p className="flex items-center gap-1.5 text-[13px] tracking-wide text-muted-foreground">
-                <MapPin className="size-3.5 flex-none text-[#8B6B3D]" aria-hidden />
-                {venture.location}
-              </p>
-              <span
-                aria-hidden
-                className="font-display text-xs tabular-nums text-navy/25 transition-colors duration-500 group-hover:text-green/70"
-              >
-                {order}
-              </span>
-            </div>
+            <p className="flex items-center gap-1.5 text-[13px] tracking-wide text-muted-foreground">
+              <MapPin className="size-3.5 flex-none text-[#8B6B3D]" aria-hidden />
+              {venture.location}
+            </p>
           )}
 
           <h3
             className={`max-w-[22ch] text-balance font-display text-2xl leading-[1.15] text-navy sm:text-[1.75rem] ${
-              venture.image ? "" : "mt-3"
+              venture.image ? "mt-1" : "mt-3"
             }`}
           >
             {venture.title}
@@ -101,35 +125,45 @@ function VentureCard({
           )}
 
           <div className="mt-4 flex-1 sm:mt-5">
-            <p
-              className={`text-[15px] leading-7 text-muted-foreground ${
-                expanded ? "" : "line-clamp-3"
-              }`}
+            <div
+              className="relative overflow-hidden transition-[max-height] duration-700 ease-[cubic-bezier(.22,1,.36,1)]"
+              style={{ maxHeight: textMaxHeight }}
             >
-              {venture.description}
-            </p>
+              <p ref={textRef} className="text-[15px] leading-7 text-muted-foreground">
+                {venture.description}
+              </p>
+              {isLong && (
+                <span
+                  aria-hidden
+                  className={`pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-white to-transparent transition-opacity duration-500 ${
+                    expanded ? "opacity-0" : "opacity-100"
+                  }`}
+                />
+              )}
+            </div>
 
-            {venture.description.length > 140 && (
+            {isLong && (
               <button
                 type="button"
                 onClick={() => setExpanded((v) => !v)}
                 aria-expanded={expanded}
-                className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-navy/15 px-3.5 py-1.5 text-[12.5px] font-medium text-navy transition-all duration-300 hover:border-green/40 hover:bg-green/5 hover:text-green focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green/50 focus-visible:ring-offset-2 focus-visible:ring-offset-sand-50"
+                className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-navy/15 px-3.5 py-1.5 text-[12.5px] font-medium text-navy transition-all duration-300 hover:border-green/40 hover:bg-green/5 hover:text-green focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green/50 focus-visible:ring-offset-2"
               >
                 {expanded ? "Show less" : "Read full brief"}
               </button>
             )}
           </div>
 
-          {/* Stats rendered as a spec-sheet strip — hairline dividers instead
-              of wrapped chips, with tabular figures for a drafted, precise feel */}
-          <div className="mt-7 flex divide-x divide-navy/10 border-t border-navy/10 pt-5 sm:mt-8">
+          <div className="mt-6 grid grid-cols-3 gap-2 sm:mt-7 sm:gap-2.5">
             {venture.stats.map((s) => (
-              <div key={s.label} className="flex-1 px-4 first:pl-0 last:pr-0">
-                <strong className="block font-display text-lg tabular-nums text-navy sm:text-xl">
+              <div
+                key={s.label}
+                className="rounded-xl border border-navy/5 bg-sand-50 px-2.5 py-3.5 text-center transition-colors duration-300 hover:bg-green/5 sm:px-3"
+              >
+                <strong className="block font-display text-base tabular-nums text-navy sm:text-lg">
                   {s.value}
                 </strong>
-                <span className="mt-0.5 block text-[11px] text-muted-foreground">
+                <span className="mt-0.5 block text-[11px] leading-4 text-muted-foreground">
                   {s.label}
                 </span>
               </div>
@@ -141,13 +175,15 @@ function VentureCard({
   );
 }
 
-export default function FutureVentures({
-  ventures,
-}: {
-  ventures: Venture[];
-}) {
+export default function FutureVentures({ ventures }: { ventures: Venture[] }) {
+  // Two ventures sit in two columns; three or more use the 3-up grid.
+  const gridCols =
+    ventures.length >= 3 ? "md:grid-cols-2 lg:grid-cols-3" : "md:grid-cols-2";
+
   return (
     <section className="relative overflow-hidden bg-sand-50 py-8 sm:py-20">
+      <style dangerouslySetInnerHTML={{ __html: css }} />
+
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-[0.035]"
@@ -157,8 +193,6 @@ export default function FutureVentures({
           backgroundSize: "48px 48px",
         }}
       />
-      {/* Soft directional light easing the flat grid — kept faint so the
-          hairline layout stays the dominant texture */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
@@ -175,13 +209,17 @@ export default function FutureVentures({
               <span className="h-[1.15px] w-3 bg-navy/60 sm:w-5" aria-hidden />
               <p className="text-sm font-medium !text-green">What&apos;s next</p>
             </div>
-            <h2 className="heading-lg mt-3 text-balance">
-              Future &amp; proposed ventures.
-            </h2>
+            <h2 className="heading-lg mt-3 text-balance">Future &amp; proposed ventures.</h2>
+            {/* Vanasthali Hills removed from copy:
             <p className="body-lg mt-4 text-pretty sm:mt-5">
               Ambitious developments in planning, from a green high-rise
               tower to a destination resort and a premium gated plots
               community.
+            </p>
+            */}
+            <p className="body-lg mt-4 text-pretty sm:mt-5">
+              Ambitious developments in planning, from a hilltop destination
+              resort to a premium community of weekend villas.
             </p>
           </div>
 
@@ -192,29 +230,21 @@ export default function FutureVentures({
             Explore all ventures
             <span className="flex size-8 items-center justify-center rounded-full bg-navy text-white transition-colors duration-300 group-hover:bg-green">
               <ArrowUpRight
-                className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                 aria-hidden
               />
             </span>
           </Link>
         </div>
 
-        <div className="mt-12 grid items-stretch gap-px overflow-hidden bg-navy/10 sm:mt-14 md:grid-cols-2 lg:grid-cols-3">
+        <div className={`mt-12 grid items-stretch gap-6 sm:mt-14 lg:gap-8 ${gridCols}`}>
           {ventures.map((venture, i) => (
-            <VentureCard
-              key={venture.title}
-              venture={venture}
-              index={i}
-              delay={i * 80}
-            />
+            <VentureCard key={venture.title} venture={venture} delay={i * 80} />
           ))}
         </div>
 
         <div className="mt-10 flex justify-center sm:hidden">
-          <Link
-            href="/future-ventures"
-            className="btn-dark group inline-flex items-center gap-2.5"
-          >
+          <Link href="/future-ventures" className="btn-dark group inline-flex items-center gap-2.5">
             Explore all ventures
             <ArrowRight
               className="size-4 transition-transform duration-300 group-hover:translate-x-1"

@@ -198,6 +198,7 @@ export const futureVentures = [
       "Private landscaped gardens with lawns, thin creepers and circular flower ponds",
     ],
   },
+  /* Vanasthali Hills — commented out
   {
     title: "High-Rise Residential Tower",
     location: "Vanasthali Hills, Nagole, Hyderabad",
@@ -217,6 +218,7 @@ export const futureVentures = [
       "40 feet wide roads on all three sides for smooth traffic flow and ventilation",
     ],
   },
+  */
 ];
 
 export const parksideAmenityZones = [

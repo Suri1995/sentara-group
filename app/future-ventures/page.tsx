@@ -8,16 +8,16 @@ import FutureVenturesCarousel from "@/components/FutureVentureCarousel";
 
 export const metadata: Metadata = {
   title: "Future & Proposed Ventures",
+  // Vanasthali Hills removed from copy:
+  // description:
+  //   "Explore Sentara Group's upcoming developments — a green high-rise residential tower in Nagole, a destination resort near Yadadri, and a premium gated plots layout.",
   description:
-    "Explore Sentara Group's upcoming developments — a green high-rise residential tower in Nagole, a destination resort near Yadadri, and a premium gated plots layout.",
+    "Explore Sentara Group's upcoming developments — Kakatiya by Sentara, a 150-acre hilltop resort and weekend-villa masterplan near Yadadri.",
 };
 
 export default function FutureVenturesPage() {
   return (
     <section className="relative overflow-hidden py-24 sm:py-32">
-      {/* Faint blueprint grid + soft glow — same ambient texture used
-          across the site, so this page opens in the same visual language
-          as the About/Home heroes rather than feeling like a plain list */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-[0.035]"
@@ -40,7 +40,9 @@ export default function FutureVenturesPage() {
         <SectionHeading
           eyebrow="What's Next"
           title="Future & Proposed Ventures"
-          description="Ambitious developments in active planning — expanding the Sentara Group footprint across residential towers, destination hospitality and premium gated communities."
+          // Vanasthali Hills removed from copy:
+          // description="Ambitious developments in active planning — expanding the Sentara Group footprint across residential towers, destination hospitality and premium gated communities."
+          description="Ambitious developments in active planning — expanding the Sentara Group footprint across destination hospitality and premium weekend-villa communities."
           align="center"
         />
 
