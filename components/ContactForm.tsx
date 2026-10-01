@@ -1,22 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { projects } from "@/lib/data";
-
-// Projects that should NOT appear in the "I'm interested in" dropdown.
-// Matching ignores case, spaces and hyphens, so "Arunjyothi", "Arun Jyothi"
-// and "arun-jyothi" are all caught (and any name that contains it).
-const HIDDEN_PROJECTS = ["arunjyothi"];
-
-const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]/g, "");
-
-const interestOptions = projects.filter(
-  (p) =>
-    !HIDDEN_PROJECTS.some(
-      (hidden) =>
-        normalize(p.slug).includes(hidden) || normalize(p.name).includes(hidden),
-    ),
-);
 
 export default function ContactForm() {
   const [status, setStatus] = useState<"idle" | "submitting" | "sent">("idle");
@@ -82,16 +66,18 @@ export default function ContactForm() {
       </div>
       <div className="sm:col-span-2">
         <label className="mb-2 block text-xs font-semibold uppercase tracking-widest text-navy-500">
-          I&rsquo;m interested in
+          Looking for
         </label>
-        <select className="w-full rounded-xl border border-navy-200 bg-white px-4 py-3.5 text-sm text-navy-900 outline-none transition-colors focus:border-green-500">
-          {interestOptions.map((p) => (
-            <option key={p.slug} value={p.name}>
-              {p.name}
-            </option>
-          ))}
-          <option value="Future Ventures">Future & Proposed Ventures</option>
-          <option value="General Enquiry">General Enquiry</option>
+        <select
+          required
+          defaultValue=""
+          className="w-full rounded-xl border border-navy-200 bg-white px-4 py-3.5 text-sm text-navy-900 outline-none transition-colors focus:border-green-500"
+        >
+          <option value="" disabled>
+            Select a property type
+          </option>
+          <option value="Villa">Villa</option>
+          <option value="Apartment">Apartment</option>
         </select>
       </div>
       <div className="sm:col-span-2">
