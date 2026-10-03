@@ -4,9 +4,9 @@ import { TeamMember } from "@/components/LeadershipSection";
 export const brand = {
   name: "Sentara Group",
   tagline: "Where Land Meets Legacy",
-  phone: "+91 99492 11371",
-  phoneRaw: "+919949211371",
-  email: "rajendarrangu@sentaraprojects.com",
+  phone: "+918143995546",
+  phoneRaw: "+918143995546",
+  email: "info@sentaraprojects.com",
   addressHQ: "Sentara, Ramanthapur, Hyderabad – 500013",
 };
 
@@ -111,7 +111,7 @@ export const projects: ProjectSummary[] = [
     statusLabel: "Ongoing & Under Execution",
     description:
       "A masterplanned 50-acre eco-neighbourhood of 270 premium 4 BHK triplex villas, anchored by a resort-style clubhouse and over 75 amenities across five lifestyle zones.",
-    image: "/images/parkside/street-view.jpg",
+    image: "/images/parkside/street-view.jpeg",
     stats: [
       { value: "50", label: "Acres" },
       { value: "270", label: "Premium Villas" },
@@ -291,7 +291,7 @@ export const parksideGallery = [
   "/images/parkside/hero-couple.jpg",
   "/images/parkside/entrance-road.jpg",
   "/images/parkside/community-garden-aerial.jpg",
-  "/images/parkside/street-view.jpg",
+  "/images/parkside/street-view.jpeg",
   "/images/parkside/community-farming.jpg",
   "/images/parkside/community-dine.jpg",
   "/images/parkside/leisure-pool.jpg",

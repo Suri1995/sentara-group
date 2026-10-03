@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 };
 
 const heroSlides = [
-  { image: "/images/parkside/street-view.jpg", subcaption: "Anvita Parkside", caption: "Nestle in Nature" },
+  { image: "/images/parkside/street-view.jpeg", subcaption: "Anvita Parkside", caption: "Nestle in Nature" },
   { image: "/images/parkside/entrance-road.jpg", subcaption: "Grand Entrance", caption: "A Masterplanned 50-Acre Eco-Neighbourhood" },
   { image: "/images/parkside/hero-couple.jpg", subcaption: "Villa Living", caption: "Imagine Anvita Parkside" },
 ];
