@@ -192,7 +192,6 @@ export function teamEmail(lead: Lead) {
     <tr><td style="padding:22px 40px 0;">
       <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
         <td style="padding:0 10px 10px 0;">${button(`tel:+${digits.length === 10 ? "91" + digits : digits}`, "Call now", NAVY)}</td>
-        <td style="padding:0 10px 10px 0;">${button(wa, "WhatsApp", GREEN)}</td>
         <td style="padding:0 0 10px 0;">${button(`mailto:${lead.email}`, "Email", "#ffffff", NAVY, NAVY)}</td>
       </tr></table>
     </td></tr>
