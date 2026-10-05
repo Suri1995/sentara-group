@@ -158,6 +158,9 @@ export const projects: ProjectSummary[] = [
  * a separate 30-acre hilltop resort zone). Each entry's `image` is an
  * indicative render (masterplan / concept), not on-site photography —
  * these ventures are still in planning.
+ *
+ * `brochure` is optional. When set, the carousel slide shows a
+ * "Download presentation" button pointing at that file in /public.
  */
 export const futureVentures = [
   {
@@ -178,11 +181,12 @@ export const futureVentures = [
       "10 acres of themed parks, herbal and aroma gardens, and walking trails",
       "Proposed 5-acre helipad / eVTOL zone with work-from-the-hills spaces",
     ],
+    brochure: "/images/downloads/Kakatiya-Weekend-Villas-Presentation.pptx",
   },
   {
     title: "Weekend Villas",
     location: "Konapuram, M. Turkapally, Yadadri Bhuvanagiri",
-    image: "/images/turkapally/plotting-villa.jpeg",
+    image: "/images/turkapally/plotting-villa.png",
     description:
       "Kakatiya by Sentara is a 150-acre weekend-villa and resort masterplan at M. Turkapally, split into a 120-acre villa community and a 30-acre hilltop resort. This villa community is terraced along the property's natural hill contours for elevated views and everyday privacy, with generous 1,500 sq. yd. plots each carrying a 2,500 sft biophilic glass villa.",
     stats: [
@@ -197,6 +201,7 @@ export const futureVentures = [
       "Tree-lined plot edges in place of wall-heavy boundaries",
       "Private landscaped gardens with lawns, thin creepers and circular flower ponds",
     ],
+    brochure: "/images/downloads/Kakatiya-Weekend-Villas-Presentation.pptx",
   },
   /* Vanasthali Hills — commented out
   {

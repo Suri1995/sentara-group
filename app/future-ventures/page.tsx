@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Download, FileText } from "lucide-react";
 import SectionHeading from "@/components/SectionHeading";
 import Reveal from "@/components/Reveal";
 import { futureVentures } from "@/lib/data";
@@ -14,6 +14,8 @@ export const metadata: Metadata = {
   description:
     "Explore Sentara Group's upcoming developments — Kakatiya by Sentara, a 150-acre hilltop resort and weekend-villa masterplan near Yadadri.",
 };
+
+const PRESENTATION_URL = "/images/downloads/Kakatiya-Weekend-Villas-Presentation.pptx";
 
 export default function FutureVenturesPage() {
   return (
@@ -46,7 +48,7 @@ export default function FutureVenturesPage() {
           align="center"
         />
 
-        <Reveal delay={100} className="mt-14 sm:mt-16">
+        <Reveal delay={140} className="mt-12 sm:mt-14">
           <FutureVenturesCarousel ventures={futureVentures} />
         </Reveal>
 
@@ -57,13 +59,16 @@ export default function FutureVenturesPage() {
               Interested in early access or investment opportunities in
               these upcoming developments?
             </p>
-            <Link
-              href="/contact"
-              className="venture-cta btn-dark mt-7 inline-flex min-h-11 items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-2"
-            >
-              Register your interest
-              <ArrowUpRight className="venture-cta-arrow size-4" aria-hidden />
-            </Link>
+
+            <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
+              <Link
+                href="/contact"
+                className="venture-cta btn-dark inline-flex min-h-11 items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-2"
+              >
+                Register your interest
+                <ArrowUpRight className="venture-cta-arrow size-4" aria-hidden />
+              </Link>
+            </div>
           </div>
         </Reveal>
       </div>

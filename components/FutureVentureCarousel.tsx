@@ -3,7 +3,13 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, ChevronLeft, ChevronRight, MapPin } from "lucide-react";
+import {
+  ArrowUpRight,
+  ChevronLeft,
+  ChevronRight,
+  Download,
+  MapPin,
+} from "lucide-react";
 import StatCounter from "@/components/StatCounter";
 
 interface VentureStat {
@@ -18,6 +24,8 @@ interface Venture {
   description: string;
   stats: VentureStat[];
   highlights: string[];
+  /** Optional path to a downloadable file, e.g. "/downloads/deck.pptx" */
+  brochure?: string;
 }
 
 const AUTOPLAY_MS = 8000;
@@ -269,7 +277,7 @@ export default function FutureVenturesCarousel({
                       </ul>
 
                       <div
-                        className="fv-item mt-auto pt-9"
+                        className="fv-item mt-auto flex flex-wrap items-center gap-3 pt-9"
                         style={{ ["--d" as any]: `${0.75 + v.highlights.length * 0.08}s` }}
                       >
                         <Link
@@ -286,6 +294,29 @@ export default function FutureVenturesCarousel({
                             <ArrowUpRight className="size-4" aria-hidden />
                           </span>
                         </Link>
+
+                        {v.brochure && (
+  <a
+    href={v.brochure}
+    download
+    tabIndex={active ? 0 : -1}
+    className="group/dl relative inline-flex min-h-12 items-center gap-3 rounded-full bg-[#D9B26A] py-1.5 pl-6 pr-1.5 text-sm font-semibold text-navy-950 shadow-[0_14px_34px_-12px_rgba(217,178,106,0.9)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#E6C686] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8B6B3D]/60 focus-visible:ring-offset-2"
+  >
+    Download presentation
+    <span className="relative flex size-9 items-center justify-center">
+      <span
+        aria-hidden
+        className="absolute inset-0 animate-ping rounded-full bg-navy-900/40 motion-reduce:animate-none"
+      />
+      <span className="relative flex size-9 items-center justify-center rounded-full bg-navy-900 text-white">
+        <Download
+          className="size-4 transition-transform duration-300 group-hover/dl:translate-y-0.5"
+          aria-hidden
+        />
+      </span>
+    </span>
+  </a>
+)}
                       </div>
                     </div>
                   </div>
