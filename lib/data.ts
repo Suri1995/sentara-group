@@ -7,7 +7,7 @@ export const brand = {
   phone: "+918143995546",
   phoneRaw: "+918143995546",
   email: "info@sentaraprojects.com",
-  addressHQ: "Sentara, Ramanthapur, Hyderabad – 500013",
+  addressHQ: "Sentara, 5th Floor, GAR 71, Liberty Plaza, Phase 2, HMDA Layout, Uppal Bhagayath",
 };
 
 export const heroStats = [
