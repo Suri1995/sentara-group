@@ -14,9 +14,9 @@ const jakarta = Plus_Jakarta_Sans({
 // Set NEXT_PUBLIC_SITE_URL in .env.production (e.g. https://www.yourdomain.com)
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.sentaraprojects.com";
 const siteName = "Sentara Group";
-const tagline = "Where Land Meets Legacy";
+const tagline = "Premium Villas & Real Estate in Hyderabad";
 const description =
-  "Hyderabad-based real estate group delivering premium villas, healthcare and hospitality developments — Anvita Parkside, Landspace Elite and Arunjyothi Hospitals.";
+  "Hyderabad real estate group building premium villas, healthcare and hospitality projects: Anvita Parkside, Landspace Elite and Arunjyothi Hospitals.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
