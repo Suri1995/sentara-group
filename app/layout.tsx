@@ -12,7 +12,7 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 // Set NEXT_PUBLIC_SITE_URL in .env.production (e.g. https://www.yourdomain.com)
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.sentaragroup.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.sentaraprojects.com";
 const siteName = "Sentara Group";
 const tagline = "Where Land Meets Legacy";
 const description =
