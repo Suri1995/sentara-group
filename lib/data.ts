@@ -4,8 +4,8 @@ import { TeamMember } from "@/components/LeadershipSection";
 export const brand = {
   name: "Sentara Group",
   tagline: "Where Land Meets Legacy",
-  phone: "+918143995546",
-  phoneRaw: "+918143995546",
+  phone: "+918885988845",
+  phoneRaw: "+918885988845",
   email: "info@sentaraprojects.com",
   addressHQ: "Sentara, 5th Floor, GAR 71, Liberty Plaza, Phase 2, HMDA Layout, Uppal Bhagayath",
 };
