@@ -9,9 +9,9 @@ const cards = [
     label: "Head Office",
     value: brand.addressHQ,
     Icon: MapPin,
-    hint: "Open in Google Maps",
-    // Opens the address in Google Maps
-    href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(brand.addressHQ)}`,
+    hint: "Get directions on Google Maps",
+    // Opens Google Maps with directions to the office
+    href: brand.directionsUrl,
     external: true,
     copyable: true,
   },

@@ -221,7 +221,6 @@ export default function Footer() {
   const markWord = brand.name.split(" ")[0];
   const markSize = { fontSize: "clamp(4.5rem, 21vw, 19rem)" };
   const markClass = "text-center font-display font-semibold leading-[0.82] tracking-tight";
-  const mapsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(brand.addressHQ)}`;
 
   return (
     <footer
@@ -335,7 +334,8 @@ export default function Footer() {
             <Reveal delay={240}>
               <ColumnHeading>Get in touch</ColumnHeading>
               <div className="flex flex-col gap-1.5">
-                <ContactRow icon={MapPin} href={mapsHref} external>
+                {/* Opens Google Maps with directions to the office */}
+                <ContactRow icon={MapPin} href={brand.directionsUrl} external>
                   {brand.addressHQ}
                 </ContactRow>
                 <ContactRow icon={Phone} href={`tel:${brand.phoneRaw}`} copy={brand.phone} label="phone number">

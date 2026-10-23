@@ -7,7 +7,10 @@ export const brand = {
   phone: "+918885988845",
   phoneRaw: "+918885988845",
   email: "info@sentaraprojects.com",
-  addressHQ: "Sentara, 5th Floor, GAR 71, Liberty Plaza, Phase 2, HMDA Layout, Uppal Bhagayath",
+  addressHQ:
+    "5th Floor, GAR 71, Liberty Plaza, HMDA Layout Rd, Phase 2, Bhagayath, Uppal, Hyderabad, Telangana 500039",
+  directionsUrl:
+    "https://www.google.com/maps/dir/?api=1&destination=17.385758,78.5539181&travelmode=driving",
 };
 
 export const heroStats = [
