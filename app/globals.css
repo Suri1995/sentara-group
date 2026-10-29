@@ -8,13 +8,14 @@
 
 :root {
   --font-jakarta: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-jakarta);
+  --font-display: var(--font-editorial);
   --font-sans: var(--font-jakarta);
 
-  --color-navy: #0b2452;
-  --color-green: #0f7a3c;
-  --color-sand: #fbf9f4;
-  --color-ink: #12161c;
+  --color-navy: #102a2b;
+  --color-green: #315f49;
+  --color-brass: #a98245;
+  --color-sand: #f8f7f3;
+  --color-ink: #151a1b;
 
   --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -36,6 +37,7 @@
        substituting dark-mode defaults (backgrounds, form controls,
        scrollbars) anywhere we haven't styled explicitly. */
     color-scheme: light;
+    background-color: var(--color-sand);
   }
 
   body {
@@ -122,26 +124,26 @@
 
   .eyebrow {
     @apply inline-flex items-center gap-2
-      text-xs font-semibold uppercase
-      tracking-[0.25em] text-green-600;
+      text-[10px] font-bold uppercase
+      tracking-[0.32em] text-green-600;
   }
 
   .heading-xl {
-    @apply font-display text-4xl font-medium
-      leading-[1.04] tracking-tight text-navy-900
-      sm:text-5xl lg:text-6xl xl:text-7xl;
+    @apply font-display text-5xl font-semibold
+      leading-[0.92] tracking-[-0.03em] text-navy-900
+      sm:text-6xl lg:text-7xl xl:text-8xl;
   }
 
   .heading-lg {
-    @apply font-display text-3xl font-medium
-      leading-[1.08] tracking-tight text-navy-900
-      sm:text-4xl lg:text-5xl;
+    @apply font-display text-4xl font-semibold
+      leading-[0.95] tracking-[-0.025em] text-navy-900
+      sm:text-5xl lg:text-6xl;
   }
 
   .heading-md {
-    @apply font-display text-2xl font-medium
-      leading-[1.12] tracking-tight text-navy-900
-      sm:text-3xl lg:text-4xl;
+    @apply font-display text-3xl font-semibold
+      leading-[0.98] tracking-[-0.02em] text-navy-900
+      sm:text-4xl lg:text-5xl;
   }
 
   .body-lg {
@@ -222,9 +224,9 @@
      ------------------------------------------------------- */
 
   .card-premium {
-    @apply rounded-2xl
-      border border-navy-100/70
-      bg-white
+    @apply rounded-[1.35rem]
+      border border-navy-900/[0.08]
+      bg-white/90
       shadow-card
       transition-all duration-500;
     transition-timing-function: var(--ease-premium);
@@ -261,8 +263,7 @@
      ------------------------------------------------------- */
 
   .divider-gold {
-    @apply h-[3px] w-16 rounded-full
-      bg-gradient-to-r from-green-500 via-green-600 to-navy-500;
+    @apply h-px w-20 rounded-full bg-brass;
   }
 
   .divider-premium {

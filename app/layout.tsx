@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Cormorant_Garamond, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -9,6 +9,13 @@ const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-jakarta",
   weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+});
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  variable: "--font-editorial",
+  weight: ["500", "600", "700"],
   display: "swap",
 });
 
@@ -107,7 +114,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#ffffff", // match your sand-50 hex if you want the browser UI tinted
+  themeColor: "#f8f7f3",
   colorScheme: "light",
 };
 
@@ -133,7 +140,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en-IN" className={`${jakarta.variable} bg-sand-50`}>
+    <html lang="en-IN" className={`${jakarta.variable} ${cormorant.variable} bg-sand-50`}>
       <body className="flex min-h-screen flex-col bg-sand-50 font-sans antialiased">
         <script
           type="application/ld+json"
