@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import FloatingContact from "@/components/FloatingContact";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -141,6 +142,9 @@ export default function RootLayout({
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />
+
+        {/* Global floating contact (WhatsApp, call, email, directions) on every page */}
+        <FloatingContact />
       </body>
     </html>
   );
